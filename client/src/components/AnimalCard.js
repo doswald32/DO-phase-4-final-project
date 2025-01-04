@@ -4,9 +4,9 @@ function AnimalCard({ name, DOB, species}) {
 
     return (
         <div className="animal-card">
-            <h1>Name: {name}</h1>
-            <p>{species}</p>
-            <span>{format(DOB, "MMMM do, yyyy")}</span>
+            <h1>{name}</h1>
+            <p>Species: {species}</p>
+            <span>Date of Birth: {format(DOB, "MMMM do, yyyy")}</span>
         </div>
     )
 }
