@@ -4,7 +4,7 @@ from datetime import datetime
 
 from config import db
 
-class Dog(db.model):
+class Dog(db.Model):
     __tablename__ = 'dogs'
 
     id = db.Column(db.Integer, primary_key=True)
