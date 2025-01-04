@@ -4,14 +4,14 @@ from datetime import datetime
 
 from config import db
 
-class Dog(db.Model):
-    __tablename__ = 'dogs'
+class Animal(db.Model):
+    __tablename__ = 'animals'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     DOB = db.Column(db.DateTime)
-    breed = db.Column(db.String)
+    species = db.Column(db.String)
 
     def __repr__(self):
-        return f'<Dog {self.id}, {self.name}, {self.DOB}, {self.breed}>'
+        return f'<Animal {self.id}, {self.name}, {self.DOB}, {self.species}>'
 

@@ -2,27 +2,61 @@
 
 # Standard library imports
 from random import randint, choice as rc
+from datetime import datetime
 
 # Remote library imports
 from faker import Faker
 
 # Local imports
 from app import app
-from models import db, Dog
+from models import db, Animal
 
-def create_dogs():
-    dogs = []
-    for _ in range(10):
-        dog = Dog(name=fake.name(), DOB=faker.date.between({ from: '2012-01-01', to: Date.now() })
-                  )
+fake = Faker()
+
+def create_animals():
+    start_date = datetime.strptime('2004-01-01', '%Y-%m-%d').date()
+    end_date = datetime.strptime('2023-12-12', '%Y-%m-%d').date()
+
+    animals = [
+        Animal(
+            name="Duncan",
+            DOB=fake.date_between(start_date=start_date, end_date=end_date),
+            species="Dog"
+        ),
+        Animal(
+            name="Larry",
+            DOB=fake.date_between(start_date=start_date, end_date=end_date),
+            species="Dog"
+        ),
+        Animal(
+            name="Lucy",
+            DOB=fake.date_between(start_date=start_date, end_date=end_date),
+            species="Cat"
+        ),
+        Animal(
+            name="Trudy",
+            DOB=fake.date_between(start_date=start_date, end_date=end_date),
+            species="Turtle"
+        ),
+        Animal(
+            name="Ethel",
+            DOB=fake.date_between(start_date=start_date, end_date=end_date),
+            species="Cat"
+        ),
+    ]
+
+    print(animals)
+    return animals
 
 if __name__ == '__main__':
     
-    fake = Faker()
-    
     with app.app_context():
         print("Clearing database...")
-        Dog.query.delete()
+        Animal.query.delete()
 
-        print("Seeding dogs...")
-        dogs = 
+        print("Seeding animals...")
+        animals = create_animals()
+        db.session.add_all(animals)
+        db.session.commit()
+
+        print("Done seeding!")
