@@ -10,10 +10,10 @@ function NavBar() {
                 Home
             </NavLink>
             <NavLink
-            to="/dogs"
+            to="/animals"
             className="nav-link"
             >
-                Dogs
+                Animals
             </NavLink>
             <NavLink
             to="/add-a-visit"

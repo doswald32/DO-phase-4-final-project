@@ -4,7 +4,7 @@ import App from "./components/App";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./components/Home";
-import Dogs from "./components/Dogs";
+import Animals from "./components/Animals";
 import AddVisit from "./components/AddVisit";
 
 const router = createBrowserRouter([
@@ -17,8 +17,8 @@ const router = createBrowserRouter([
                 element: <Home />,
             },
             {
-                path:"/dogs",
-                element: <Dogs />,
+                path:"/animals",
+                element: <Animals />,
             },
             {
                 path:"/add-a-visit",
