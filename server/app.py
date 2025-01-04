@@ -18,23 +18,17 @@ def index():
 
 @app.route('/animals')
 def animals(): 
-
     animals = []
     for animal in Animal.query.all():
-        animal_dict = {
-            "id": animal.id,
-            "name": animal.name,
-            "DOB": animal.DOB,
-            "species": animal.species,
-        }
-        animals.append(animal_dict)
+        new = animal.to_dict()
+        animals.append(new)
 
-        response = make_response(
-            jsonify(animals),
-            200
-        )
+    response = make_response(
+        jsonify(animals),
+        200
+    )
 
-        return response
+    return response
 
 
 if __name__ == '__main__':
