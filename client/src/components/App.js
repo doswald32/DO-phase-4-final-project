@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
+import NavBar from "./NavBar";
+import "../App.css"
 
 function App() {
   return (
     <div>
       <header>
-        <h1>Testing</h1>
+        <NavBar />
       </header>
     </div>
   );
