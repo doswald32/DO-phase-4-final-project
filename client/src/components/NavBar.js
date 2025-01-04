@@ -9,6 +9,18 @@ function NavBar() {
             >
                 Home
             </NavLink>
+            <NavLink
+            to="/dogs"
+            className="nav-link"
+            >
+                Dogs
+            </NavLink>
+            <NavLink
+            to="/add-a-visit"
+            className="nav-link"
+            >
+                Add a Visit
+            </NavLink>
         </nav>
     )
 }
