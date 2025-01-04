@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
 import NavBar from "./NavBar";
-import "../App.css"
+import "../App.css";
+import { Outlet } from "react-router-dom";
 
 function App() {
   return (
@@ -9,6 +9,7 @@ function App() {
       <header>
         <NavBar />
       </header>
+      <Outlet />
     </div>
   );
 }
