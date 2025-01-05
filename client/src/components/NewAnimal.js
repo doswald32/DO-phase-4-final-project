@@ -48,6 +48,7 @@ function NewAnimal() {
                     <input id="animal-form-owner" className="animal-form-inputs" type="text" placeholder="Owner Name" value={newAnimalData.owner_name} onChange={onChangeOwnerName}/>
                     <label>Visit Date: </label>
                     <input id="animal-form-visit" className="animal-form-inputs" type="date" value={newAnimalData.last_visit} onChange={onChangeLastVisit}/>
+                    <button id="new-animal-submit-button">Submit</button>
                 </form>
             </main>
         </>
