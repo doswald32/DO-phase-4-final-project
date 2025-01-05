@@ -20,32 +20,41 @@ def create_animals():
     animals = [
         Animal(
             name="Duncan",
-            DOB=fake.date_between(start_date=start_date, end_date=end_date),
-            species="Dog"
+            DOB=datetime.date(2011, 9, 24),
+            species="Dog",
+            owner="Ron Swanson",
+            last_visit=datetime.date(2024, 12, 5)
         ),
         Animal(
             name="Larry",
             DOB=fake.date_between(start_date=start_date, end_date=end_date),
-            species="Dog"
+            species="Dog", 
+            owner="Ron Swanson",
+            last_visit=datetime.date(2024, 12, 5)
         ),
         Animal(
             name="Lucy",
             DOB=fake.date_between(start_date=start_date, end_date=end_date),
-            species="Cat"
+            species="Cat", 
+            owner="Ron Swanson",
+            last_visit=datetime.date(2024, 12, 5)
         ),
         Animal(
             name="Trudy",
             DOB=fake.date_between(start_date=start_date, end_date=end_date),
-            species="Turtle"
+            species="Turtle", 
+            owner="Ron Swanson",
+            last_visit=datetime.date(2024, 12, 5)
         ),
         Animal(
             name="Ethel",
             DOB=fake.date_between(start_date=start_date, end_date=end_date),
-            species="Cat"
+            species="Cat", 
+            owner="Ron Swanson",
+            last_visit=datetime.date(2024, 12, 5)
         ),
     ]
 
-    print(animals)
     return animals
 
 if __name__ == '__main__':
