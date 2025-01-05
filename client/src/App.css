@@ -28,3 +28,13 @@
     box-shadow: 5px 5px 2.5px lightgray;
     border-radius: 5px;
   }
+
+  .new-animal-form {
+    display: grid;
+    width: 400px;
+    margin: 5px;
+  }
+
+  .animal-form-inputs {
+    margin-bottom: 10px;
+  }
