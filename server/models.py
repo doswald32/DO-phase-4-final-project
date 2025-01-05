@@ -10,7 +10,7 @@ class Animal(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    DOB = db.Column(db.DateTime)
+    DOB = db.Column(db.Date)
     species = db.Column(db.String)
 
     def __repr__(self):
@@ -32,7 +32,7 @@ class Visit(db.Model, SerializerMixin):
     __tablename__ = 'visits'
 
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.DateTime)
+    date = db.Column(db.Date)
 
     def __repr__(self):
         return f'{self.date}'
