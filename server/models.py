@@ -7,7 +7,7 @@ from config import db
 
 animal_owners = db.Table('animal_owners',
     db.Column('animal_id', db.Integer, db.ForeignKey('animals.id'), primary_key=True),
-    db.Column('owner.id', db.Integer, db.ForeignKey('owners.id'), primary_key=True)
+    db.Column('owner_id', db.Integer, db.ForeignKey('owners.id'), primary_key=True)
 )
 
 class Animal(db.Model, SerializerMixin):
