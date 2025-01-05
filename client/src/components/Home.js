@@ -5,7 +5,7 @@ function Home() {
             <h3>Instructions</h3>
             <p>- Click on the Animals link to be taken to a list of animals in our database</p>
             <p>- Once in the Animals section, click on an animal to see his/her information (Name, DOB, species, etc.)</p>
-            <p>- Click on Add a Visit to add a new vet visit for an animal</p>
+            <p>- Click on Add an Animal to add a new pet to the database</p>
         </main>
     )
 }

@@ -5,7 +5,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./components/Home";
 import Animals from "./components/Animals";
-import AddVisit from "./components/AddVisit";
+import NewAnimal from "./components/NewAnimal";
 
 const router = createBrowserRouter([
     {
@@ -21,8 +21,8 @@ const router = createBrowserRouter([
                 element: <Animals />,
             },
             {
-                path:"/add-a-visit",
-                element: <AddVisit />,
+                path:"/new-animal",
+                element: <NewAnimal />,
             }
         ]
     }

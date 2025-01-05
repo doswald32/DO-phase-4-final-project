@@ -16,10 +16,10 @@ function NavBar() {
                 Animals
             </NavLink>
             <NavLink
-            to="/add-a-visit"
+            to="/new-animal"
             className="nav-link"
             >
-                Add a Visit
+                New Animal
             </NavLink>
         </nav>
     )
