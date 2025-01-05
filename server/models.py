@@ -16,3 +16,15 @@ class Animal(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Animal {self.id}, {self.name}, {self.DOB}, {self.species}>'
 
+
+class Owner(db.Model, SerializerMixin):
+    __tablename__ = 'owners'
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String)
+    last_name = db.Column(db.String)
+
+    def __repr__(self):
+        return f'<Owner {self.first_name} {self.last_name}'
+    
+    
