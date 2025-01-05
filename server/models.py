@@ -27,4 +27,13 @@ class Owner(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Owner {self.first_name} {self.last_name}'
     
+
+class Visit(db.Model, SerializerMixin):
+    __tablename__ = 'visits'
+
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.DateTime)
+
+    def __repr__(self):
+        return f'{self.date}'
     
