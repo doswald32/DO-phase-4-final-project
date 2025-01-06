@@ -7,7 +7,7 @@ function Animals() {
 
     return (
         <div className="animals-list">{animalsList.map((animal) => {
-            return <AnimalCard key={animal.id} name={animal.name} DOB={animal.DOB} species={animal.species} owners={animal.owner} visits={animal.visits} />
+            return <AnimalCard key={animal.id} name={animal.name} DOB={animal.DOB} species={animal.species} owners={animal.owners} visits={animal.visits} />
         })}</div>
     )
 }
