@@ -71,12 +71,14 @@ class Visit(db.Model, SerializerMixin):
         return {
         "id": self.id,
         "date": self.date,
+        "summary": self.summary,
         "animal": [animal.id for animal in self.animal],
         "owner": [owner.id for owner in self.owner],
     }
 
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
+    summary = db.Column(db.String)
 
     animal_id = db.Column(db.Integer, db.ForeignKey('animals.id'))
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
