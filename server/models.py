@@ -17,13 +17,13 @@ class Animal(db.Model, SerializerMixin):
 
     # def to_dict(self):
     #     return {
-    #     "id": self.id,
-    #     "name": self.name,
-    #     "DOB": self.DOB,
-    #     "species": self.species,
-    #     "owners": [({ "first_name": owner.first_name, "last_name": owner.last_name }) for owner in self.owners],
-    #     "visits": [({ "date": visit.date, "summary": visit.summary }) for visit in self.visits]
-    # }
+    #       "id": self.id,
+    #       "name": self.name,
+    #       "DOB": self.DOB,
+    #       "species": self.species,
+    #       "owners": [{ "id": owner.id, "first_name": owner.first_name, "last_name": owner.last_name } for owner in self.owners],
+    #       "visits": [{ "id": visit.id, "date": visit.date, "summary": visit.summary } for visit in self.visits]
+    #      }
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
