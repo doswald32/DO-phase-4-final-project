@@ -1,6 +1,6 @@
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
-from datetime import datetime
+from datetime import datetime, date
 from sqlalchemy_serializer import SerializerMixin
 
 from config import db
@@ -12,6 +12,18 @@ animal_owners = db.Table('animal_owners',
 
 class Animal(db.Model, SerializerMixin):
     __tablename__ = 'animals'
+
+    serialize_rules = ('-visits.animal', '-owners.animals',)
+
+    def to_dict(self):
+        return {
+        "id": self.id,
+        "name": self.name,
+        "DOB": self.DOB,
+        "species": self.species,
+        "owners": [owner.id for owner in self.owners],
+        "visits": [visit.id for visit in self.visits],
+    }
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -28,6 +40,17 @@ class Animal(db.Model, SerializerMixin):
 class Owner(db.Model, SerializerMixin):
     __tablename__ = 'owners'
 
+    serialize_rules = ('-visits.owner', '-animals.owners',)
+
+    def to_dict(self):
+        return {
+        "id": self.id,
+        "first_name": self.first_name,
+        "last_name": self.last_name,
+        "visits": [visit.id for visit in self.visits],
+        "animals": [animal.id for animal in self.animals]
+    }
+
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
@@ -41,6 +64,16 @@ class Owner(db.Model, SerializerMixin):
 
 class Visit(db.Model, SerializerMixin):
     __tablename__ = 'visits'
+
+    serialize_rules = ('-animal.visits', '-owner.visits',)
+
+    def to_dict(self):
+        return {
+        "id": self.id,
+        "date": self.date,
+        "animal": [animal.id for animal in self.animal],
+        "owner": [owner.id for owner in self.owner],
+    }
 
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)

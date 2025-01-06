@@ -13,8 +13,8 @@ from models import db, Animal, Owner, Visit, animal_owners
 
 fake = Faker()
 
-start_date = datetime.strptime('2004-01-01', '%Y-%m-%d').date()
-end_date = datetime.strptime('2023-12-12', '%Y-%m-%d').date()
+# start_date = datetime.strptime('2004-01-01', '%Y-%m-%d').date()
+# end_date = datetime.strptime('2023-12-12', '%Y-%m-%d').date()
 
 if __name__ == '__main__':
     
@@ -35,22 +35,26 @@ if __name__ == '__main__':
         )
         a2 = Animal(
             name="Larry",
-            DOB=fake.date_between(start_date=start_date, end_date=end_date),
+            DOB=date(2000, 11, 11),
+            # DOB=fake.date_between(start_date=start_date, end_date=end_date),
             species="Dog"
         )
         a3 = Animal(
             name="Lucy",
-            DOB=fake.date_between(start_date=start_date, end_date=end_date),
+            DOB=date(2000, 11, 11),
+            # DOB=fake.date_between(start_date=start_date, end_date=end_date),
             species="Cat"
         )
         a4 = Animal(
             name="Trudy",
-            DOB=fake.date_between(start_date=start_date, end_date=end_date),
+            DOB=date(2000, 11, 11),
+            # DOB=fake.date_between(start_date=start_date, end_date=end_date),
             species="Turtle"
         )
         a5 = Animal(
             name="Ethel",
-            DOB=fake.date_between(start_date=start_date, end_date=end_date),
+            DOB=date(2000, 11, 11),
+            # DOB=fake.date_between(start_date=start_date, end_date=end_date),
             species="Cat"
         )
         animals = [a1, a2, a3, a4, a5]
