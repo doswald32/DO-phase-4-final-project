@@ -21,8 +21,9 @@ class Animal(db.Model, SerializerMixin):
         "name": self.name,
         "DOB": self.DOB,
         "species": self.species,
-        "owners": [(owner.first_name, ' ', owner.last_name) for owner in self.owners],
-        "visits": [visit.date for visit in self.visits],
+        "owners": [(owner.first_name, owner.last_name) for owner in self.owners],
+        "visit_date": [visit.date for visit in self.visits],
+        "visit_summary": [visit.summary for visit in self.visits]
     }
 
     id = db.Column(db.Integer, primary_key=True)

@@ -74,11 +74,11 @@ if __name__ == '__main__':
 
         #Seed Visits
         print("Seeding visits...")
-        v1 = Visit(date=date(2024, 1, 1), animal=a1, owner=o1)
-        v2 = Visit(date=date(2024, 1, 1), animal=a2, owner=o2)
-        v3 = Visit(date=date(2024, 1, 1), animal=a3, owner=o3)
-        v4 = Visit(date=date(2024, 1, 1), animal=a4, owner=o4)
-        v5 = Visit(date=date(2024, 1, 1), animal=a5, owner=o5)
+        v1 = Visit(date=date(2024, 1, 1), summary="annual check up", animal=a1, owner=o1)
+        v2 = Visit(date=date(2024, 1, 1), summary="annual check up", animal=a2, owner=o2)
+        v3 = Visit(date=date(2024, 1, 1), summary="annual check up", animal=a3, owner=o3)
+        v4 = Visit(date=date(2024, 1, 1), summary="annual check up", animal=a4, owner=o4)
+        v5 = Visit(date=date(2024, 1, 1), summary="annual check up", animal=a5, owner=o5)
         visits = [v1, v2, v3, v4, v5]
         db.session.add_all(visits)
         db.session.commit()
