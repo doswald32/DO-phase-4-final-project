@@ -15,16 +15,15 @@ class Animal(db.Model, SerializerMixin):
 
     serialize_rules = ('-visits.animal', '-owners.animals',)
 
-    def to_dict(self):
-        return {
-        "id": self.id,
-        "name": self.name,
-        "DOB": self.DOB,
-        "species": self.species,
-        "owners": [(owner.first_name, owner.last_name) for owner in self.owners],
-        "visit_date": [visit.date for visit in self.visits],
-        "visit_summary": [visit.summary for visit in self.visits]
-    }
+    # def to_dict(self):
+    #     return {
+    #     "id": self.id,
+    #     "name": self.name,
+    #     "DOB": self.DOB,
+    #     "species": self.species,
+    #     "owners": [({ "first_name": owner.first_name, "last_name": owner.last_name }) for owner in self.owners],
+    #     "visits": [({ "date": visit.date, "summary": visit.summary }) for visit in self.visits]
+    # }
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -43,15 +42,6 @@ class Owner(db.Model, SerializerMixin):
 
     serialize_rules = ('-visits.owner', '-animals.owners',)
 
-    def to_dict(self):
-        return {
-        "id": self.id,
-        "first_name": self.first_name,
-        "last_name": self.last_name,
-        "visits": [visit.id for visit in self.visits],
-        "animals": [animal.id for animal in self.animals]
-    }
-
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
@@ -67,15 +57,6 @@ class Visit(db.Model, SerializerMixin):
     __tablename__ = 'visits'
 
     serialize_rules = ('-animal.visits', '-owner.visits',)
-
-    def to_dict(self):
-        return {
-        "id": self.id,
-        "date": self.date,
-        "summary": self.summary,
-        "animal": [animal.id for animal in self.animal],
-        "owner": [owner.id for owner in self.owner],
-    }
 
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
