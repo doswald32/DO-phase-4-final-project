@@ -9,20 +9,17 @@ from faker import Faker
 
 # Local imports
 from app import app
-from models import db, Animal, Owner, Visit, animal_owners
+from models import db, Animal, Owner, Visit, Vet
 
 fake = Faker()
 
-# start_date = datetime.strptime('2004-01-01', '%Y-%m-%d').date()
-# end_date = datetime.strptime('2023-12-12', '%Y-%m-%d').date()
 
 if __name__ == '__main__':
     
     with app.app_context():
         print("Clearing database...")
-        db.session.query(animal_owners).delete()
-        db.session.commit()
         Animal.query.delete()
+        Vet.query.delete()
         Owner.query.delete()
         Visit.query.delete()
 
@@ -36,29 +33,39 @@ if __name__ == '__main__':
         a2 = Animal(
             name="Larry",
             DOB=date(2000, 11, 11),
-            # DOB=fake.date_between(start_date=start_date, end_date=end_date),
             species="Dog"
         )
         a3 = Animal(
             name="Lucy",
             DOB=date(2000, 11, 11),
-            # DOB=fake.date_between(start_date=start_date, end_date=end_date),
             species="Cat"
         )
         a4 = Animal(
             name="Trudy",
             DOB=date(2000, 11, 11),
-            # DOB=fake.date_between(start_date=start_date, end_date=end_date),
             species="Turtle"
         )
         a5 = Animal(
             name="Ethel",
             DOB=date(2000, 11, 11),
-            # DOB=fake.date_between(start_date=start_date, end_date=end_date),
             species="Cat"
         )
         animals = [a1, a2, a3, a4, a5]
         db.session.add_all(animals)
+        db.session.commit()
+
+        #Seed Vets
+        print("Seeding vets...")
+        vet1 = Vet(first_name = "Dan", last_name="Oswald", hire_date=date(2020, 1, 1))
+        db.session.add(vet1)
+        db.session.commit()
+
+        #Add Animals to Vets
+        vet1.animals.append(a1)
+        vet1.animals.append(a2)
+        vet1.animals.append(a3)
+        vet1.animals.append(a4)
+        vet1.animals.append(a5)
         db.session.commit()
 
         #Seed Owners
@@ -84,19 +91,21 @@ if __name__ == '__main__':
         db.session.commit()
 
         #Add Owner(s) to Animal
-        a1.owners.append(o1)
-        a2.owners.append(o2)
-        a3.owners.append(o3)
-        a4.owners.append(o4)
-        a4.owners.append(o5)
-        db.session.commit()
+        # print("Adding owners to animals...")
+        # a1.owners.append(o1)
+        # a2.owners.append(o2)
+        # a3.owners.append(o3)
+        # a4.owners.append(o4)
+        # a4.owners.append(o5)
+        # db.session.commit()
 
-        #Add Animals to Owner
-        o1.animals.append(a2)
-        o2.animals.append(a3)
-        o3.animals.append(a4)
-        o4.animals.append(a3)
-        o5.animals.append(a5)
-        db.session.commit()
+        # #Add Animals to Owner
+        # print("Adding animals to owners...")
+        # o1.animals.append(a2)
+        # o2.animals.append(a3)
+        # o3.animals.append(a4)
+        # o4.animals.append(a3)
+        # o5.animals.append(a5)
+        # db.session.commit()
 
         print("Done seeding!")
