@@ -14,7 +14,7 @@ function Animals() {
             DOB={animal.DOB} 
             species={animal.species} 
             owners={animal.owners} 
-            visit_date={animal.visit_date} 
+            visit_date={`${animal.visits[0].owner.first_name} ${animal.visits[0].owner.last_name}`} 
             visit_summary={animal.visit_summary}/>
         })}</div>
     )
