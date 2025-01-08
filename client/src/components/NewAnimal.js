@@ -4,10 +4,12 @@ function NewAnimal() {
 
     const [newAnimalData, setNewAnimalData] = useState({
         name: "",
-        dob: "",
         species: "",
-        owner_name: "",
-        last_visit: "",
+        dob: "",
+        primary_owner_name: "",
+        secondary_owner_name: "",
+        visit_date: "",
+        visit_summary: ""
     });
 
     function onChangeName(e) {
@@ -24,12 +26,20 @@ function NewAnimal() {
         setNewAnimalData({ ...newAnimalData, species: e.target.value })
     }
 
-    function onChangeOwnerName(e) {
-        setNewAnimalData({ ...newAnimalData, owner_name: e.target.value })
+    function onChangePrimaryOwnerName(e) {
+        setNewAnimalData({ ...newAnimalData, primary_owner_name: e.target.value })
     }
 
-    function onChangeLastVisit(e) {
-        setNewAnimalData({ ...newAnimalData, last_visit: e.target.value })
+    function onChangeSecondaryOwnerName(e) {
+        setNewAnimalData({ ...newAnimalData, secondary_owner_name: e.target.value })
+    }
+
+    function onChangeVisitDate(e) {
+        setNewAnimalData({ ...newAnimalData, visit_date: e.target.value })
+    }
+
+    function onChangeVisitSummary(e) {
+        setNewAnimalData({ ...newAnimalData, visit_summary: e.target.value })
     }
 
     console.log(newAnimalData)
@@ -40,14 +50,18 @@ function NewAnimal() {
                 <form className="new-animal-form">
                     <label>Name: </label>
                     <input id="animal-form-name" className="animal-form-inputs" type="text" placeholder="Name" value={newAnimalData.name} onChange={onChangeName}/>
-                    <label>DOB: </label>
-                    <input id="animal-form-dob" className="animal-form-inputs" type="date" value={newAnimalData.dob} onChange={onChangeDOB}/>
                     <label>Species: </label>
                     <input id="animal-form-species" className="animal-form-inputs" type="text" placeholder="Species" value={newAnimalData.species} onChange={onChangeSpecies}/>
-                    <label>Owner Name: </label>
-                    <input id="animal-form-owner" className="animal-form-inputs" type="text" placeholder="Owner Name" value={newAnimalData.owner_name} onChange={onChangeOwnerName}/>
+                    <label>DOB: </label>
+                    <input id="animal-form-dob" className="animal-form-inputs" type="date" value={newAnimalData.dob} onChange={onChangeDOB}/>
+                    <label>Primary Owner: </label>
+                    <input id="animal-form-owner" className="animal-form-inputs" type="text" placeholder="Owner Name" value={newAnimalData.owner_name} onChange={onChangePrimaryOwnerName}/><button id="new-owner-button">Add New Owner</button>
+                    <label>Secondary Owner (Optional): </label>
+                    <input id="animal-form-owner" className="animal-form-inputs" type="text" placeholder="Owner Name" value={newAnimalData.owner_name} onChange={onChangeSecondaryOwnerName}/>
                     <label>Visit Date: </label>
-                    <input id="animal-form-visit" className="animal-form-inputs" type="date" value={newAnimalData.last_visit} onChange={onChangeLastVisit}/>
+                    <input id="animal-form-visit-date" className="animal-form-inputs" type="date" value={newAnimalData.visit_date} onChange={onChangeVisitDate}/>
+                    <label>Visit Summary: </label>
+                    <input id="animal-form-visit-summary" className="animal-form-inputs" type="textarea" value={newAnimalData.visit_summary} onChange={onChangeVisitSummary}/>
                     <button id="new-animal-submit-button">Submit</button>
                 </form>
             </main>

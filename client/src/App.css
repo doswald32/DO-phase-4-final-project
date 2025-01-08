@@ -53,6 +53,10 @@
     margin: 5px;
   }
 
+  #animal-form-visit-summary {
+    height: 50px;
+  }
+
   .animal-form-inputs {
     margin-bottom: 10px;
   }
