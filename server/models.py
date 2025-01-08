@@ -57,6 +57,8 @@ class Vet(db.Model, SerializerMixin):
 
     animals = db.relationship('Animal', back_populates='vet')
 
+    visits = association_proxy('animals', 'visits', creator=lambda visit_obj: Animal(visit=visit_obj))
+
     def __repr__(self):
         return f'<Vet {self.id}, {self.first_name} {self.last_name}>'
     
@@ -74,7 +76,10 @@ class Visit(db.Model, SerializerMixin):
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
 
     animal = db.relationship('Animal', back_populates='visits')
+
     owner = db.relationship('Owner', back_populates='visits')
+
+    vet = association_proxy('animal', 'vet', creator=lambda vet_obj: Animal(vet=vet_obj))
 
     def __repr__(self):
         return f'{self.date}'
