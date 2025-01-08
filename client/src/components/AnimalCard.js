@@ -1,6 +1,6 @@
 // import { format } from 'date-fns'
 
-function AnimalCard({ name, DOB, species, owners, visit_date, visit_summary}) {
+function AnimalCard({ name, vet, DOB, species, owners, visit_date, visit_summary}) {
 
     // const normalizedDOB = new Date(DOB + 'T00:00:00');
     // format(normalizedDOB, "MMMM do, yyyy")
@@ -8,6 +8,7 @@ function AnimalCard({ name, DOB, species, owners, visit_date, visit_summary}) {
     return (
         <div className="animal-card">
             <p id="animal-card-name" className="animal-card-items">{name}</p>
+            <p id="animal-card-vet" className="animal-card-items">Assigned Veterinarian: {vet}</p>
             <p id="animal-card-species" className="animal-card-items">Species: {species}</p>
             <p id="animal-card-dob" className="animal-card-items">Date of Birth: {DOB}</p>
             <p id="animal-card-owner" className="animal-card-items">Owner(s): {owners}</p>
