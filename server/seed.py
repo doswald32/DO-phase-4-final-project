@@ -56,8 +56,10 @@ if __name__ == '__main__':
 
         #Seed Vets
         print("Seeding vets...")
-        vet1 = Vet(first_name = "Dan", last_name="Oswald", hire_date=date(2020, 1, 1))
-        db.session.add(vet1)
+        vet1 = Vet(first_name="Dan", last_name="Oswald", hire_date=date(2020, 1, 1))
+        vet2 = Vet(first_name="Hannah", last_name="Gangware", hire_date=date(2020, 1, 1))
+        vets = [vet1, vet2]
+        db.session.add_all(vets)
         db.session.commit()
 
         #Add Animals to Vets
