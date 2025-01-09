@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function NewAnimal() {
 
@@ -6,11 +6,43 @@ function NewAnimal() {
         name: "",
         species: "",
         dob: "",
-        primary_owner_name: "",
-        secondary_owner_name: "",
+        primary_owner: {
+            id: "",
+            first_name: "",
+            last_name: ""
+        },
+        secondary_owner_: {
+            id: "",
+            first_name: "",
+            last_name: ""
+        },
         visit_date: "",
         visit_summary: ""
     });
+
+    const [owners, setOwners] = useState([])
+    const [primaryOwnerId, setPrimaryOwnerId] = useState("")
+    const [secondaryOwnerId, setSecondaryOwnerId] = useState("")
+    
+
+    useEffect(() => {
+        fetch('http://127.0.0.1:5555/owners')
+        .then(r => r.json())
+        .then(data => setOwners(data))
+    }, [])
+
+    function primaryOwnerName() {
+        return owners.map((owner) => (
+            <option key={owner.id} value={owner.id}>{`${owner.first_name} ${owner.last_name}`}</option>
+        ))
+    }
+
+    function secondaryOwnerName() {
+        const primaryId = parseInt(primaryOwnerId, 10)
+        return owners.filter((owner) => owner.id !== primaryId).map((owner) => (
+            <option key={owner.id} value={owner.id}>{`${owner.first_name} ${owner.last_name}`}</option>
+        ))
+    }
 
     function onChangeName(e) {
         setNewAnimalData({ ...newAnimalData, name: e.target.value })
@@ -26,12 +58,12 @@ function NewAnimal() {
         setNewAnimalData({ ...newAnimalData, species: e.target.value })
     }
 
-    function onChangePrimaryOwnerName(e) {
-        setNewAnimalData({ ...newAnimalData, primary_owner_name: e.target.value })
+    function onChangePrimaryOwnerId(e) {
+        setPrimaryOwnerId(e.target.value)
     }
 
-    function onChangeSecondaryOwnerName(e) {
-        setNewAnimalData({ ...newAnimalData, secondary_owner_name: e.target.value })
+    function onChangeSecondaryOwnerId(e) {
+        setSecondaryOwnerId(e.target.value)
     }
 
     function onChangeVisitDate(e) {
@@ -42,7 +74,7 @@ function NewAnimal() {
         setNewAnimalData({ ...newAnimalData, visit_summary: e.target.value })
     }
 
-    console.log(newAnimalData)
+    console.log(primaryOwnerId)
 
     return (
         <>
@@ -55,9 +87,18 @@ function NewAnimal() {
                     <label>DOB: </label>
                     <input id="animal-form-dob" className="animal-form-inputs" type="date" value={newAnimalData.dob} onChange={onChangeDOB}/>
                     <label>Primary Owner: </label>
-                    <input id="animal-form-owner" className="animal-form-inputs" type="text" placeholder="Owner Name" value={newAnimalData.owner_name} onChange={onChangePrimaryOwnerName}/><button id="new-owner-button">Add New Owner</button>
+                    <div>
+                        <select id="animal-form-owner-primary" className="animal-form-inputs" value={primaryOwnerId} onChange={onChangePrimaryOwnerId}>
+                            <option value="">Select an Owner</option>
+                            {primaryOwnerName()}
+                        </select>
+                        <button id="new-owner-button" className="add-new-owner-row">Add New Owner</button>
+                    </div>
                     <label>Secondary Owner (Optional): </label>
-                    <input id="animal-form-owner" className="animal-form-inputs" type="text" placeholder="Owner Name" value={newAnimalData.owner_name} onChange={onChangeSecondaryOwnerName}/>
+                    <select id="animal-form-owner-secondary" className="animal-form-inputs" value={secondaryOwnerId} onChange={onChangeSecondaryOwnerId}>
+                        <option value="">Select an Owner</option>
+                        {secondaryOwnerName()}
+                    </select>
                     <label>Visit Date: </label>
                     <input id="animal-form-visit-date" className="animal-form-inputs" type="date" value={newAnimalData.visit_date} onChange={onChangeVisitDate}/>
                     <label>Visit Summary: </label>
