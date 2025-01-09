@@ -21,8 +21,10 @@ function NewAnimal() {
     });
 
     const [owners, setOwners] = useState([])
+    const [vets, setVets] = useState([])
     const [primaryOwnerId, setPrimaryOwnerId] = useState("")
     const [secondaryOwnerId, setSecondaryOwnerId] = useState("")
+    const [vetId, setVetId] = useState("")
     
 
     useEffect(() => {
@@ -31,16 +33,28 @@ function NewAnimal() {
         .then(data => setOwners(data))
     }, [])
 
-    function primaryOwnerName() {
+    useEffect(() => {
+        fetch('http://127.0.0.1:5555/vets')
+        .then(r => r.json())
+        .then(data => setVets(data))
+    }, [])
+
+    function primaryOwnerOptions() {
         return owners.map((owner) => (
             <option key={owner.id} value={owner.id}>{`${owner.first_name} ${owner.last_name}`}</option>
         ))
     }
 
-    function secondaryOwnerName() {
+    function secondaryOwnerOption() {
         const primaryId = parseInt(primaryOwnerId, 10)
         return owners.filter((owner) => owner.id !== primaryId).map((owner) => (
             <option key={owner.id} value={owner.id}>{`${owner.first_name} ${owner.last_name}`}</option>
+        ))
+    }
+
+    function vetOptions() {
+        return vets.map((vet) => (
+            <option key={vet.id} value={vet.id}>{`${vet.first_name} ${vet.last_name}`}</option>
         ))
     }
 
@@ -66,6 +80,10 @@ function NewAnimal() {
         setSecondaryOwnerId(e.target.value)
     }
 
+    function onChangeVetId(e) {
+        setVetId(e.target.value)
+    }
+
     function onChangeVisitDate(e) {
         setNewAnimalData({ ...newAnimalData, visit_date: e.target.value })
     }
@@ -74,7 +92,7 @@ function NewAnimal() {
         setNewAnimalData({ ...newAnimalData, visit_summary: e.target.value })
     }
 
-    console.log(primaryOwnerId)
+    console.log(vetId)
 
     return (
         <>
@@ -90,14 +108,19 @@ function NewAnimal() {
                     <div>
                         <select id="animal-form-owner-primary" className="animal-form-inputs" value={primaryOwnerId} onChange={onChangePrimaryOwnerId}>
                             <option value="">Select an Owner</option>
-                            {primaryOwnerName()}
+                            {primaryOwnerOptions()}
                         </select>
                         <button id="new-owner-button" className="add-new-owner-row">Add New Owner</button>
                     </div>
                     <label>Secondary Owner (Optional): </label>
                     <select id="animal-form-owner-secondary" className="animal-form-inputs" value={secondaryOwnerId} onChange={onChangeSecondaryOwnerId}>
                         <option value="">Select an Owner</option>
-                        {secondaryOwnerName()}
+                        {secondaryOwnerOption()}
+                    </select>
+                    <label>Attending Veterinarian: </label>
+                    <select id="animal-form-vet" className="animal-form-inputs" value={vetId} onChange={onChangeVetId}>
+                        <option>Select a Veterinarian</option>
+                        {vetOptions()}
                     </select>
                     <label>Visit Date: </label>
                     <input id="animal-form-visit-date" className="animal-form-inputs" type="date" value={newAnimalData.visit_date} onChange={onChangeVisitDate}/>

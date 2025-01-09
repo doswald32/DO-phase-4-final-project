@@ -9,7 +9,7 @@ from flask_restful import Resource
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import db, Animal
+from models import db, Animal, Owner, Vet
 # Views go here!
 
 @app.route('/')
@@ -25,6 +25,34 @@ def animals():
 
     response = make_response(
         jsonify(animals),
+        200
+    )
+
+    return response
+
+@app.route('/owners')
+def owners():
+    owners = []
+    for owner in Owner.query.all():
+        new = owner.to_dict()
+        owners.append(new)
+
+    response = make_response(
+        jsonify(owners),
+        200
+    )
+
+    return response
+
+@app.route('/vets')
+def vets():
+    vets = []
+    for vet in Vet.query.all():
+        new = vet.to_dict()
+        vets.append(new)
+
+    response = make_response(
+        jsonify(vets),
         200
     )
 

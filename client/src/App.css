@@ -1,32 +1,32 @@
 .nav-link {
-    display: inline-block;
-    box-sizing: border-box;
-    border-radius: 5px;
-    width: 150px;
-    padding: 5px;
-    margin: 5px;
-    background: rgb(53, 53, 55);
-    text-decoration: none;
-    text-align: center;
-    color: white;
+  display: inline-block;
+  box-sizing: border-box;
+  border-radius: 5px;
+  width: 150px;
+  padding: 5px;
+  margin: 5px;
+  background: rgb(53, 53, 55);
+  text-decoration: none;
+  text-align: center;
+  color: white;
 }
 
 .animal-card {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: medium;
-    width: 400px;
-    margin: 5px;
-    padding: 5px;
-    border: solid;
-    border-width: 1px;
-    border-radius: 5px;
-    background-color: rgb(240, 236, 236);
-  }
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: medium;
+  width: 400px;
+  margin: 5px;
+  padding: 5px;
+  border: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  background-color: rgb(240, 236, 236);
+}
 
 #animal-card-name {
-    font-weight: bold;
-    font-size: large;
-  }
+  font-weight: bold;
+  font-size: large;
+}
 
 .animal-card-items {
   margin: auto;
@@ -38,31 +38,43 @@
 }
 
 .animals-list {
-    border-style: solid;
-    border-width: 1px;
-    width: fit-content;
-    overflow: auto;
-    margin: 5px;
-    box-shadow: 5px 5px 2.5px lightgray;
-    border-radius: 5px;
-  }
+  border-style: solid;
+  border-width: 1px;
+  width: fit-content;
+  overflow: auto;
+  margin: 5px;
+  box-shadow: 5px 5px 2.5px lightgray;
+  border-radius: 5px;
+}
 
-  .new-animal-form {
-    display: grid;
-    width: 400px;
-    margin: 5px;
-  }
+.new-animal-form {
+  display: grid;
+  width: 400px;
+  margin: 5px;
+}
 
-  #animal-form-visit-summary {
-    height: 50px;
-  }
+#animal-form-visit-summary {
+  height: 50px;
+}
 
-  .animal-form-inputs {
-    margin-bottom: 10px;
-  }
+.animal-form-inputs {
+  margin-bottom: 10px;
+}
 
-  #new-animal-submit-button {
-    width: 75px;
-    margin-top: 10px;
-  }
+.primary-owner-container {
+  display: flex;
+}
+
+#animal-form-owner-primary {
+  width: 268px;
+}
+
+#new-owner-button {
+  margin-left: 10px;
+}
+
+#new-animal-submit-button {
+  width: 75px;
+  margin-top: 10px;
+}
 
