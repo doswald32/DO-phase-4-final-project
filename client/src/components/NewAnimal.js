@@ -1,92 +1,81 @@
 import React, { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 function NewAnimal() {
-    const { animalsList, setAnimalsList } = useOutletContext();
-
-    const [newAnimalData, setNewAnimalData] = useState({
-        name: "",
-        species: "",
-        dob: "",
-        vet: "",
-        owners: [],
-        visits: [],
-        visit_date: "",
-        visit_summary: "",
-    });
-
+    const { setAnimalsList } = useOutletContext();
     const [owners, setOwners] = useState([])
     const [vets, setVets] = useState([])
-    const [primaryOwnerId, setPrimaryOwnerId] = useState("")
-    // const [secondaryOwnerId, setSecondaryOwnerId] = useState("")
-    const [vetId, setVetId] = useState("")
     
 
     useEffect(() => {
         fetch('http://127.0.0.1:5555/owners')
         .then(r => r.json())
         .then(data => setOwners(data))
-    }, [])
+    }, []);
+
 
     useEffect(() => {
         fetch('http://127.0.0.1:5555/vets')
         .then(r => r.json())
         .then(data => setVets(data))
-    }, [])
+    }, []);
 
-    function handleSubmit(e) {
-        e.preventDefault();
 
-        const newAnimal = {
-            name: newAnimalData.name,
-            species: newAnimalData.species,
-            dob: newAnimalData.dob,
-            vet_id: vetId,
-            owners: [primaryOwnerId],
-            visits: [
-                {
-                    date: newAnimalData.visit_date,
-                    summary: newAnimalData.visit_summary,
-                }
-            ]
-        }
-        fetch('http://127.0.0.1:5555/animals', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newAnimal),
-        })
-            .then((r) => r.json())
-            .then((data) => setAnimalsList((prevAnimalsList) => [ ...prevAnimalsList, data]))
-        
-        setNewAnimalData({
+    const formSchema = Yup.object({
+        name: Yup.string().required("Name is required"),
+        species: Yup.string().required("Species is required"),
+        dob: Yup.date().required("Date of birth is required"),
+        primaryOwnerId: Yup.string().required("Primary owner is required"),
+        vet_id: Yup.string().required("Veterinarian is required"),
+        visit_date: Yup.date().required("Visit date is required"),
+        visit_summary: Yup.string().required("Visit summary is required"),
+    });
+
+
+    const formik = useFormik ({
+        initialValues: {
             name: "",
             species: "",
             dob: "",
-            vet: "",
-            owners: [],
-            visits: [],
+            primaryOwnerId: "",
+            vet_id: "",
             visit_date: "",
             visit_summary: "",
-        });
-        setPrimaryOwnerId("");
-        // setSecondaryOwnerId("");
-        setVetId("");
-    };
+        },
+        validationSchema: formSchema,
+        onSubmit: (values, { resetForm }) => {
+            const formattedValues = {
+                name: values.name,
+                species: values.species,
+                dob: values.dob,
+                vet_id: values.vet_id,
+                owners: [values.primaryOwnerId],
+                visits: [
+                    {
+                        date: values.visit_date,
+                        summary: values.visit_summary,
+                    },
+                ],
+            };
+            fetch("http://127.0.0.1:5555/animals", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formattedValues, null, 2),
+            })
+            .then((r) => r.json())
+            .then((data) => {setAnimalsList((prevAnimalsList) => [...prevAnimalsList, data]);
+                resetForm();
+            });
+        },
+    })
 
-
-    
 
     function primaryOwnerOptions() {
         return owners.map((owner) => (
-            <option key={owner.id} value={owner.id}>{`${owner.first_name} ${owner.last_name}`}</option>
-        ))
-    }
-
-    function secondaryOwnerOption() {
-        const primaryId = parseInt(primaryOwnerId, 10)
-        return owners.filter((owner) => owner.id !== primaryId).map((owner) => (
             <option key={owner.id} value={owner.id}>{`${owner.first_name} ${owner.last_name}`}</option>
         ))
     }
@@ -97,76 +86,35 @@ function NewAnimal() {
         ))
     }
 
-    function onChangeName(e) {
-        setNewAnimalData({ ...newAnimalData, name: e.target.value })
-    }
-
-    function onChangeDOB(e) {
-        setNewAnimalData({ ...newAnimalData, dob: e.target.value })
-    }
-
-    function onChangeSpecies(e) {
-        setNewAnimalData({ ...newAnimalData, species: e.target.value })
-    }
-
-    function onChangePrimaryOwnerId(e) {
-        setPrimaryOwnerId(e.target.value)
-    }
-
-    // function onChangeSecondaryOwnerId(e) {
-    //     setSecondaryOwnerId(e.target.value)
-    // }
-
-    function onChangeVetId(e) {
-        setVetId(e.target.value)
-    }
-
-    function onChangeVisitDate(e) {
-        setNewAnimalData({ ...newAnimalData, visit_date: e.target.value })
-    }
-
-    function onChangeVisitSummary(e) {
-        setNewAnimalData({ ...newAnimalData, visit_summary: e.target.value })
-    }
-
-
-
     return (
-        <>
-            <main>
-                <form className="new-animal-form">
-                    <label>Name: </label>
-                    <input id="animal-form-name" className="animal-form-inputs" type="text" placeholder="Name" value={newAnimalData.name} onChange={onChangeName}/>
-                    <label>Species: </label>
-                    <input id="animal-form-species" className="animal-form-inputs" type="text" placeholder="Species" value={newAnimalData.species} onChange={onChangeSpecies}/>
-                    <label>DOB: </label>
-                    <input id="animal-form-dob" className="animal-form-inputs" type="date" value={newAnimalData.dob} onChange={onChangeDOB}/>
-                    <label>Owner: </label>
-                    <div>
-                        <select id="animal-form-owner-primary" className="animal-form-inputs" value={primaryOwnerId} onChange={onChangePrimaryOwnerId}>
+        <main>
+                <form className="new-animal-form" onSubmit={formik.handleSubmit}>
+                    <label htmlFor="name">Name: </label>
+                    <input id="name" name="name" className="animal-form-inputs" placeholder="Name" value={formik.values.name} onChange={formik.handleChange}/>
+                    <label htmlFor="species">Species: </label>
+                    <input id="species" name="species" className="animal-form-inputs" placeholder="Species" value={formik.values.species} onChange={formik.handleChange}/>
+                    <label htmlFor="dob">DOB: </label>
+                    <input id="dob" name="dob" className="animal-form-inputs" type="date" value={formik.values.dob} onChange={formik.handleChange}/>
+                    <label htmlFor="primaryOwnerId">Owner: </label>
+                    <div className="primary-owner-container">
+                        <select id="primaryOwnerId" name="primaryOwnerId" className="animal-form-inputs" value={formik.values.primaryOwnerId} onChange={formik.handleChange}>
                             <option value="">Select an Owner</option>
                             {primaryOwnerOptions()}
                         </select>
                         <button id="new-owner-button" className="add-new-owner-row">Add New Owner</button>
                     </div>
-                    {/* <label>Secondary Owner (Optional): </label> */}
-                    {/* <select id="animal-form-owner-secondary" className="animal-form-inputs" value={secondaryOwnerId} onChange={onChangeSecondaryOwnerId}>
-                        <option value="">Select an Owner</option>
-                        {secondaryOwnerOption()}
-                    </select> */}
-                    <label>Attending Veterinarian: </label>
-                    <select id="animal-form-vet" className="animal-form-inputs" value={vetId} onChange={onChangeVetId}>
-                        <option>Select a Veterinarian</option>
-                        {vetOptions()}
-                    </select>
-                    <label>Visit Date: </label>
-                    <input id="animal-form-visit-date" className="animal-form-inputs" type="date" value={newAnimalData.visit_date} onChange={onChangeVisitDate}/>
-                    <label>Visit Summary: </label>
-                    <input id="animal-form-visit-summary" className="animal-form-inputs" type="textarea" value={newAnimalData.visit_summary} onChange={onChangeVisitSummary}/>
-                    <button id="new-animal-submit-button" onClick={handleSubmit}>Submit</button>
+                    <label htmlFor="vet_id">Attending Veterinarian: </label>
+                        <select id="vet_id" name="vet_id" className="animal-form-inputs" value={formik.values.vet_id} onChange={formik.handleChange}>
+                            <option>Select a Veterinarian</option>
+                            {vetOptions()}
+                        </select>
+                    <label htmlFor="visit_date">Visit Date: </label>
+                    <input id="visit_date" name="visit_date" className="animal-form-inputs" type="date" value={formik.values.visit_date} onChange={formik.handleChange}/>
+                    <label htmlFor="visit_summary">Visit Summary: </label>
+                    <input id="visit_summary" name="visit_summary" className="animal-form-inputs" type="textarea" value={formik.values.visit_summary} onChange={formik.handleChange}/>
+                    <button id="new-animal-submit-button" type="submit">Submit</button>
                 </form>
-            </main>
-        </>
+        </main>
     )
 }
 

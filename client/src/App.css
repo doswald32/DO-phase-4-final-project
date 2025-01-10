@@ -53,10 +53,6 @@
   margin: 5px;
 }
 
-#animal-form-visit-summary {
-  height: 50px;
-}
-
 .animal-form-inputs {
   margin-bottom: 10px;
 }
@@ -65,12 +61,13 @@
   display: flex;
 }
 
-#animal-form-owner-primary {
+#primaryOwnerId {
   width: 268px;
 }
 
 #new-owner-button {
   margin-left: 10px;
+  height: 20px;
 }
 
 #new-animal-submit-button {

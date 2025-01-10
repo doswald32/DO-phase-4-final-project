@@ -52,7 +52,7 @@ def create_animal():
             vet_id=data['vet_id'],
         )
 
-        if 'visits' in data:
+        if 'owners' in data and 'visits' in data:
             for visit in data['visits']:
                 owner_id = int(data['owners'][0])
                 visit_date = datetime.strptime(visit['date'], '%Y-%m-%d').date()
