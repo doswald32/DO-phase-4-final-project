@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 
 function NewAnimal() {
+    const { animalsList, setAnimalsList } = useOutletContext();
 
     const [newAnimalData, setNewAnimalData] = useState({
         name: "",
         species: "",
         dob: "",
-        primary_owner: {
-            id: "",
-            first_name: "",
-            last_name: ""
-        },
-        secondary_owner_: {
-            id: "",
-            first_name: "",
-            last_name: ""
-        },
+        vet: "",
+        owners: [],
+        visits: [],
         visit_date: "",
-        visit_summary: ""
+        visit_summary: "",
     });
 
     const [owners, setOwners] = useState([])
@@ -38,6 +33,50 @@ function NewAnimal() {
         .then(r => r.json())
         .then(data => setVets(data))
     }, [])
+
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        const newAnimal = {
+            name: newAnimalData.name,
+            species: newAnimalData.species,
+            dob: newAnimalData.dob,
+            vet_id: vetId,
+            owners: [primaryOwnerId, secondaryOwnerId].filter(Boolean),
+            visits: [
+                {
+                    date: newAnimalData.visit_date,
+                    summary: newAnimalData.visit_summary,
+                }
+            ]
+        }
+        fetch('http://127.0.0.1:5555/animals', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newAnimal),
+        })
+            .then((r) => r.json())
+            .then((data) => setAnimalsList((prevAnimalsList) => [ ...prevAnimalsList, data]))
+        
+        setNewAnimalData({
+            name: "",
+            species: "",
+            dob: "",
+            vet: "",
+            owners: [],
+            visits: [],
+            visit_date: "",
+            visit_summary: "",
+        });
+        setPrimaryOwnerId("");
+        setSecondaryOwnerId("");
+        setVetId("");
+    };
+
+
+    
 
     function primaryOwnerOptions() {
         return owners.map((owner) => (
@@ -60,12 +99,10 @@ function NewAnimal() {
 
     function onChangeName(e) {
         setNewAnimalData({ ...newAnimalData, name: e.target.value })
-        console.log(newAnimalData)
     }
 
     function onChangeDOB(e) {
         setNewAnimalData({ ...newAnimalData, dob: e.target.value })
-        console.log(newAnimalData)
     }
 
     function onChangeSpecies(e) {
@@ -92,7 +129,7 @@ function NewAnimal() {
         setNewAnimalData({ ...newAnimalData, visit_summary: e.target.value })
     }
 
-    console.log(vetId)
+
 
     return (
         <>
@@ -126,7 +163,7 @@ function NewAnimal() {
                     <input id="animal-form-visit-date" className="animal-form-inputs" type="date" value={newAnimalData.visit_date} onChange={onChangeVisitDate}/>
                     <label>Visit Summary: </label>
                     <input id="animal-form-visit-summary" className="animal-form-inputs" type="textarea" value={newAnimalData.visit_summary} onChange={onChangeVisitSummary}/>
-                    <button id="new-animal-submit-button">Submit</button>
+                    <button id="new-animal-submit-button" onClick={handleSubmit}>Submit</button>
                 </form>
             </main>
         </>

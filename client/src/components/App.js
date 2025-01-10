@@ -18,7 +18,7 @@ function App() {
       <header>
         <NavBar />
       </header>
-      <Outlet context={{animalsList, setAnimalsList}}/>
+      <Outlet context={{ animalsList, setAnimalsList }}/>
     </div>
   );
 }
