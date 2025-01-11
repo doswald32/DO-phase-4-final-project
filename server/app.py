@@ -21,7 +21,6 @@ def index():
     return '<h1>Project Server</h1>'
 
 
-
 @app.route('/animals')
 def animals(): 
     animals = []
@@ -73,6 +72,7 @@ def create_animal():
         print(f"Error creating animal: {e}")  # Log the error
         return make_response({"error": str(e)}, 400)
     
+
 @app.route('/animals/<int:id>')
 def get_animal_by_id(id):
     animal = Animal.query.filter(Animal.id == id).first()
@@ -81,6 +81,22 @@ def get_animal_by_id(id):
     response = make_response(jsonify(animal_dict), 200)
 
     return response
+
+
+@app.route('/animals/<int:id>', methods=['PATCH'])
+def update_animal(id):
+    data = request.json
+    animal = Animal.query.filter_by(id = id).first()
+    for key, value in data.items():
+        if key == "DOB":
+            setattr(animal, "DOB", datetime.strptime(value, '%Y-%m-%d').date())
+        else: 
+            setattr(animal, key, value)
+    
+    db.session.commit()
+
+    return make_response(jsonify(animal.to_dict()), 200)
+
 
 @app.route('/animals/<int:id>', methods=['DELETE'])
 def delete_animal(id):
@@ -93,6 +109,7 @@ def delete_animal(id):
     response = make_response(jsonify(response_body), 200)
 
     return response
+
 
 @app.route('/owners')
 def owners():
@@ -108,6 +125,7 @@ def owners():
 
     return response
 
+
 @app.route('/owners', methods=['POST'])
 def add_owner():
     data = request.json
@@ -122,6 +140,7 @@ def add_owner():
 
     return make_response(jsonify(new_owner.to_dict()), 201)
 
+
 @app.route('/vets')
 def vets():
     vets = []
@@ -135,6 +154,7 @@ def vets():
     )
 
     return response
+
 
 @app.route('/vets', methods=['POST'])
 def add_vet():

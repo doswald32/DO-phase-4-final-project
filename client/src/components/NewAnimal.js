@@ -95,10 +95,6 @@ function NewAnimal() {
                             <option value="">Select an Owner</option>
                             {primaryOwnerOptions()}
                         </select>
-                        {/* <button id="new-owner-button" className="add-new-owner-row" onClick={() => setIsNewOwnerOpen(true)}>Add New Owner</button>
-                        {isNewOwnerOpen && (
-                            <NewOwner onClose={() => setIsNewOwnerOpen(false)}></NewOwner>
-                        )} */}
                     </div>
                     <label htmlFor="vet_id">Attending Veterinarian: </label>
                         <select id="vet_id" name="vet_id" className="animal-form-inputs" value={formik.values.vet_id} onChange={formik.handleChange}>
