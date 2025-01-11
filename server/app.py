@@ -108,6 +108,20 @@ def owners():
 
     return response
 
+@app.route('/owners', methods=['POST'])
+def add_owner():
+    data = request.json
+
+    new_owner = Owner(
+        first_name=data['firstName'],
+        last_name=data['lastName']
+    )
+
+    db.session.add(new_owner)
+    db.session.commit()
+
+    return make_response(jsonify(new_owner.to_dict()), 201)
+
 @app.route('/vets')
 def vets():
     vets = []

@@ -1,11 +1,5 @@
-import { useState } from "react";
-// import { useOutletContext } from "react-router-dom";
-import NewVetForm from "./NewVetForm";
 
 function Home() {
-
-    // const { vets, setVets } = useOutletContext();
-    const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 
     return (
         <main>
@@ -15,10 +9,6 @@ function Home() {
             <p>- Once in the Animals section, click on an animal to see his/her information (Name, DOB, species, etc.)</p>
             <p>- Click on Add an Animal to add a new pet to the database</p>
             <p>- New user? Click the button below to add yourself to the Veterinarian list!</p>
-            <button onClick={() => setIsPopUpOpen(true)}>Add Veterinarian</button>
-            {isPopUpOpen && (
-                <NewVetForm onClose={() => setIsPopUpOpen(false)}></NewVetForm>
-            )}
         </main>
     )
 }

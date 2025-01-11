@@ -75,7 +75,7 @@
   margin-top: 10px;
 }
 
-.new-vet-form-container {
+.new-vet-form-container, .new-owner-form-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -88,7 +88,7 @@
   z-index: 1000;
 }
 
-.new-vet-form {
+.new-vet-form, .new-owner-form {
   background: white;
   padding: 20px;
   border-radius: 10px;

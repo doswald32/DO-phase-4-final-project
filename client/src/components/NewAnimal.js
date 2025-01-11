@@ -1,10 +1,16 @@
-// import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import NewOwner from "./NewOwner";
+import NewVetForm from "./NewVetForm";
 
 function NewAnimal() {
     const { setAnimalsList, owners, vets } = useOutletContext();
+
+    const [isNewOwnerOpen, setIsNewOwnerOpen] = useState(false);
+    const [isNewVetOpen, setIsNewVetOpen] = useState(false);
+
     // const { owners } = useOutletContext();
     // const { vets } = useOutletContext();
     // const [owners, setOwners] = useState([])
@@ -56,7 +62,7 @@ function NewAnimal() {
             })
             .then((r) => r.json())
             .then((data) => {setAnimalsList((prevAnimalsList) => [...prevAnimalsList, data]);
-            resetForm();
+                resetForm();
             });
         },
     })
@@ -89,7 +95,10 @@ function NewAnimal() {
                             <option value="">Select an Owner</option>
                             {primaryOwnerOptions()}
                         </select>
-                        <button id="new-owner-button" className="add-new-owner-row">Add New Owner</button>
+                        {/* <button id="new-owner-button" className="add-new-owner-row" onClick={() => setIsNewOwnerOpen(true)}>Add New Owner</button>
+                        {isNewOwnerOpen && (
+                            <NewOwner onClose={() => setIsNewOwnerOpen(false)}></NewOwner>
+                        )} */}
                     </div>
                     <label htmlFor="vet_id">Attending Veterinarian: </label>
                         <select id="vet_id" name="vet_id" className="animal-form-inputs" value={formik.values.vet_id} onChange={formik.handleChange}>
@@ -102,6 +111,15 @@ function NewAnimal() {
                     <input id="visit_summary" name="visit_summary" className="animal-form-inputs" type="textarea" value={formik.values.visit_summary} onChange={formik.handleChange}/>
                     <button id="new-animal-submit-button" type="submit">Submit</button>
                 </form>
+                <p>Don't see the correct Owner or Attending Veterinarian? Add either one to the database below!</p>
+                <button id="new-owner-button" className="add-new-owner-row" onClick={() => setIsNewOwnerOpen(true)}>Add New Owner</button>
+                {isNewOwnerOpen && (
+                    <NewOwner onClose={() => setIsNewOwnerOpen(false)}></NewOwner>
+                )}
+                <button onClick={() => setIsNewVetOpen(true)}>Add Veterinarian</button>
+                {isNewVetOpen && (
+                    <NewVetForm onClose={() => setIsNewVetOpen(false)}></NewVetForm>
+            )}
         </main>
     )
 }
