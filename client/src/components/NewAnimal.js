@@ -1,26 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutlet, useOutletContext } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 function NewAnimal() {
     const { setAnimalsList } = useOutletContext();
-    const [owners, setOwners] = useState([])
-    const [vets, setVets] = useState([])
-    
-
-    useEffect(() => {
-        fetch('http://127.0.0.1:5555/owners')
-        .then(r => r.json())
-        .then(data => setOwners(data))
-    }, []);
-
-
-    useEffect(() => {
-        fetch('http://127.0.0.1:5555/vets')
-        .then(r => r.json())
-        .then(data => setVets(data))
-    }, []);
+    const { owners, setOwners } = useOutletContext();
+    const { vets, setVets } = useOutletContext();
+    // const [owners, setOwners] = useState([])
+    // const [vets, setVets] = useState([])
 
 
     const formSchema = Yup.object({

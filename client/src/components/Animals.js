@@ -9,8 +9,6 @@ function Animals() {
         setAnimalsList((prevList) => prevList.filter((animal) => animal.id !== id))
     }
 
-    console.log(animalsList)
-
     return (
         <div className="animals-list">
             {animalsList.map((animal) => {
