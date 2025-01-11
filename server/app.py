@@ -20,9 +20,7 @@ from models import db, Animal, Owner, Vet, Visit
 def index():
     return '<h1>Project Server</h1>'
 
-@app.route('/test')
-def test_cors():
-    return jsonify({"message": "CORS is working"})
+
 
 @app.route('/animals')
 def animals(): 
@@ -37,6 +35,7 @@ def animals():
     )
 
     return response
+
 
 @app.route('/animals', methods=['POST'])
 def create_animal():
@@ -72,6 +71,27 @@ def create_animal():
         db.session.rollback()
         print(f"Error creating animal: {e}")  # Log the error
         return make_response({"error": str(e)}, 400)
+    
+@app.route('/animals/<int:id>')
+def get_animal_by_id(id):
+    animal = Animal.query.filter(Animal.id == id).first()
+    animal_dict = animal.to_dict()
+
+    response = make_response(jsonify(animal_dict), 200)
+
+    return response
+
+@app.route('/animals/<int:id>', methods=['DELETE'])
+def delete_animal(id):
+    animal = Animal.query.filter_by(id = id).first()
+    db.session.delete(animal)
+    db.session.commit()
+
+    response_body = {"message": f"Animal {id} successfully deleted"}
+
+    response = make_response(jsonify(response_body), 200)
+
+    return response
 
 @app.route('/owners')
 def owners():
