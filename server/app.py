@@ -67,6 +67,7 @@ def create_animal():
         db.session.commit()
 
         return make_response(jsonify(new_animal.to_dict()), 201)
+    
     except Exception as e:
         db.session.rollback()
         print(f"Error creating animal: {e}")  # Log the error
@@ -120,6 +121,23 @@ def vets():
     )
 
     return response
+
+@app.route('/vets', methods=['POST'])
+def add_vet():
+    data = request.json
+
+    hire_date = datetime.strptime(data['hireDate'], '%Y-%m-%d').date()
+
+    new_vet = Vet(
+        first_name=data['firstName'],
+        last_name=data['lastName'],
+        hire_date=hire_date
+    )
+
+    db.session.add(new_vet)
+    db.session.commit()
+
+    return make_response(jsonify(new_vet.to_dict()), 201)
 
 
 if __name__ == '__main__':

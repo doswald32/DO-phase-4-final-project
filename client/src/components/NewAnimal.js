@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useOutlet, useOutletContext } from "react-router-dom";
+// import React, { useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 function NewAnimal() {
-    const { setAnimalsList } = useOutletContext();
-    const { owners, setOwners } = useOutletContext();
-    const { vets, setVets } = useOutletContext();
+    const { setAnimalsList, owners, vets } = useOutletContext();
+    // const { owners } = useOutletContext();
+    // const { vets } = useOutletContext();
     // const [owners, setOwners] = useState([])
     // const [vets, setVets] = useState([])
 
@@ -56,7 +56,7 @@ function NewAnimal() {
             })
             .then((r) => r.json())
             .then((data) => {setAnimalsList((prevAnimalsList) => [...prevAnimalsList, data]);
-                resetForm();
+            resetForm();
             });
         },
     })
