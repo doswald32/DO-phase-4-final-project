@@ -16,7 +16,7 @@ function NewAnimal() {
         name: Yup.string().required("Name is required"),
         species: Yup.string().required("Species is required"),
         dob: Yup.date().required("Date of birth is required"),
-        primaryOwnerId: Yup.string().required("Primary owner is required"),
+        ownerId: Yup.string().required("Owner is required"),
         vet_id: Yup.string().required("Veterinarian is required"),
         visit_date: Yup.date().required("Visit date is required"),
         visit_summary: Yup.string().required("Visit summary is required"),
@@ -27,7 +27,7 @@ function NewAnimal() {
             name: "",
             species: "",
             dob: "",
-            primaryOwnerId: "",
+            ownerId: "",
             vet_id: "",
             visit_date: "",
             visit_summary: "",
@@ -39,7 +39,7 @@ function NewAnimal() {
                 species: values.species,
                 dob: values.dob,
                 vet_id: values.vet_id,
-                owners: [values.primaryOwnerId],
+                owners: [values.ownerId],
                 visits: [
                     {
                         date: values.visit_date,
@@ -62,7 +62,7 @@ function NewAnimal() {
     })
 
 
-    function primaryOwnerOptions() {
+    function ownerOptions() {
         return owners.map((owner) => (
             <option key={owner.id} value={owner.id}>{`${owner.first_name} ${owner.last_name}`}</option>
         ))
@@ -74,7 +74,7 @@ function NewAnimal() {
         ))
     }
 
-    
+
     return (
         <main>
                 <form className="new-animal-form" onSubmit={formik.handleSubmit}>
@@ -84,13 +84,11 @@ function NewAnimal() {
                     <input id="species" name="species" className="animal-form-inputs" placeholder="Species" value={formik.values.species} onChange={formik.handleChange}/>
                     <label htmlFor="dob">DOB: </label>
                     <input id="dob" name="dob" className="animal-form-inputs" type="date" value={formik.values.dob} onChange={formik.handleChange}/>
-                    <label htmlFor="primaryOwnerId">Owner: </label>
-                    <div className="primary-owner-container">
-                        <select id="primaryOwnerId" name="primaryOwnerId" className="animal-form-inputs" value={formik.values.primaryOwnerId} onChange={formik.handleChange}>
+                    <label htmlFor="ownerId">Owner: </label>
+                        <select id="ownerId" name="ownerId" className="animal-form-inputs" value={formik.values.ownerIdwnerId} onChange={formik.handleChange}>
                             <option value="">Select an Owner</option>
-                            {primaryOwnerOptions()}
+                            {ownerOptions()}
                         </select>
-                    </div>
                     <label htmlFor="vet_id">Attending Veterinarian: </label>
                         <select id="vet_id" name="vet_id" className="animal-form-inputs" value={formik.values.vet_id} onChange={formik.handleChange}>
                             <option>Select a Veterinarian</option>

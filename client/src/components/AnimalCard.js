@@ -29,7 +29,7 @@ function AnimalCard({ id, name, vet, DOB, species, owners, last_visit_date, last
             <p id="animal-card-owner" className="animal-card-items">Owner(s): {owners}</p>
             <p id="animal-card-visit" className="animal-card-items">Last Visit: {last_visit_date}</p>
             <p id="animal-card-summary" className="animal-card-items">Visit Summary: {last_visit_summary}</p>
-            <Link to={`/update-animal/${id}`}>Edit</Link>
+            <Link className="animal-card-button" to={`/update-animal/${id}`}>Edit</Link>
             <button className="animal-card-button" onClick={handleDelete}>Delete</button>
         </div>
     )
