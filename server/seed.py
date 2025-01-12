@@ -1,17 +1,11 @@
 #!/usr/bin/env python3
 
 # Standard library imports
-from random import randint, choice as rc
-from datetime import datetime, date
-
-# Remote library imports
-from faker import Faker
+from datetime import date
 
 # Local imports
 from app import app
 from models import db, Animal, Owner, Visit, Vet
-
-fake = Faker()
 
 
 if __name__ == '__main__':
@@ -92,22 +86,5 @@ if __name__ == '__main__':
         db.session.add_all(visits)
         db.session.commit()
 
-        #Add Owner(s) to Animal
-        # print("Adding owners to animals...")
-        # a1.owners.append(o1)
-        # a2.owners.append(o2)
-        # a3.owners.append(o3)
-        # a4.owners.append(o4)
-        # a4.owners.append(o5)
-        # db.session.commit()
-
-        # #Add Animals to Owner
-        # print("Adding animals to owners...")
-        # o1.animals.append(a2)
-        # o2.animals.append(a3)
-        # o3.animals.append(a4)
-        # o4.animals.append(a3)
-        # o5.animals.append(a5)
-        # db.session.commit()
 
         print("Done seeding!")
