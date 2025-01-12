@@ -6,15 +6,10 @@ import NewOwner from "./NewOwner";
 import NewVetForm from "./NewVetForm";
 
 function NewAnimal() {
+    
     const { setAnimalsList, owners, vets } = useOutletContext();
-
     const [isNewOwnerOpen, setIsNewOwnerOpen] = useState(false);
     const [isNewVetOpen, setIsNewVetOpen] = useState(false);
-
-    // const { owners } = useOutletContext();
-    // const { vets } = useOutletContext();
-    // const [owners, setOwners] = useState([])
-    // const [vets, setVets] = useState([])
 
 
     const formSchema = Yup.object({
@@ -26,7 +21,6 @@ function NewAnimal() {
         visit_date: Yup.date().required("Visit date is required"),
         visit_summary: Yup.string().required("Visit summary is required"),
     });
-
 
     const formik = useFormik ({
         initialValues: {
@@ -80,6 +74,7 @@ function NewAnimal() {
         ))
     }
 
+    
     return (
         <main>
                 <form className="new-animal-form" onSubmit={formik.handleSubmit}>
