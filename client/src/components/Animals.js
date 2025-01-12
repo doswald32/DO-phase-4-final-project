@@ -5,10 +5,6 @@ function Animals() {
 
     const { animalsList, setAnimalsList } = useOutletContext();
 
-    function handleDeleteAnimal(id) {
-        setAnimalsList((prevList) => prevList.filter((animal) => animal.id !== id))
-    }
-
     return (
         <div className="animals-list">
             {animalsList.map((animal) => {
@@ -22,7 +18,8 @@ function Animals() {
                     owners={`${animal.visits[0].owner.first_name} ${animal.visits[0].owner.last_name}`}
                     last_visit_date={animal.visits[0].date} 
                     last_visit_summary={animal.visits[0].summary}
-                    onDelete={handleDeleteAnimal}/>
+                    setAnimalsList={setAnimalsList}
+                    />
         })}</div>
     )
 }

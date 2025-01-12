@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function AnimalCard({ id, name, vet, DOB, species, owners, last_visit_date, last_visit_summary, onDelete}) {
+function AnimalCard({ id, name, vet, DOB, species, owners, last_visit_date, last_visit_summary, setAnimalsList}) {
 
     function handleDelete() {
         fetch(`http://127.0.0.1:5555/animals/${id}`, {
@@ -13,7 +13,7 @@ function AnimalCard({ id, name, vet, DOB, species, owners, last_visit_date, last
                 throw new Error(`Failed to delete animal from http://127.0.0.1:5555/animals/${id}`)
             }
         })
-        .then(() => onDelete(id))
+        .then(() => setAnimalsList((prevList) => prevList.filter((animal) => animal.id !== id)))
         .catch((error) => {
             console.error('Error during deletion: ', error)
             alert('Failed to delete the animal. Please try again.')
