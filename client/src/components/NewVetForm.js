@@ -4,11 +4,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 function NewVetForm({ onClose }) {
+    
     const { setVets } = useOutletContext();
-    // const [firstName, setFirstName] = useState("");
-    // const [lastName, setLastName] = useState("");
-    // const [hireDate, setHireDate] = useState("");
-
+    
     const formSchema = Yup.object({
         firstName: Yup.string().required("First name is required"),
         lastName: Yup.string().required("Last name is required."),
