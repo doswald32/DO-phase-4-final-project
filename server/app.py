@@ -156,7 +156,6 @@ class VisitResource(Resource):
         return visits, 200
 
 
-# Add Resources to API
 api.add_resource(IndexResource, "/")
 api.add_resource(AnimalResource, "/animals", "/animals/<int:id>")
 api.add_resource(OwnerResource, "/owners")

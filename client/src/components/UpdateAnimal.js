@@ -20,7 +20,7 @@ function UpdateAnimal() {
                         species: data.species || "",
                         dob: data.dob ? new Date(data.dob).toISOString().split("T")[0] : "",
                         vet_id: data.vet?.id || "",
-                        primaryOwnerId: primaryOwner?.id || "", // Prepopulate with first owner's ID
+                        primaryOwnerId: primaryOwner?.id || "",
                         secondaryOwnerId: secondaryOwner?.id || "",
                         visit_date: data.visits[0]?.date || "",
                         visit_summary: data.visits[0]?.summary || "",
