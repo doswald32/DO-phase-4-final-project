@@ -100,12 +100,14 @@ function NewAnimal() {
                     <input id="visit_summary" name="visit_summary" className="animal-form-inputs" type="textarea" value={formik.values.visit_summary} onChange={formik.handleChange}/>
                     <button id="new-animal-submit-button" type="submit">Submit</button>
                 </form>
+                <hr className="line"/>
+                <br></br>
                 <p>Don't see the correct Owner or Attending Veterinarian? Add either one to the database below!</p>
-                <button id="new-owner-button" className="add-new-owner-row" onClick={() => setIsNewOwnerOpen(true)}>Add New Owner</button>
+                <button className="new-owner-button" onClick={() => setIsNewOwnerOpen(true)}>Add New Owner</button>
                 {isNewOwnerOpen && (
                     <NewOwner onClose={() => setIsNewOwnerOpen(false)}></NewOwner>
                 )}
-                <button onClick={() => setIsNewVetOpen(true)}>Add Veterinarian</button>
+                <button className="new-vet-button" onClick={() => setIsNewVetOpen(true)}>Add Veterinarian</button>
                 {isNewVetOpen && (
                     <NewVetForm onClose={() => setIsNewVetOpen(false)}></NewVetForm>
             )}

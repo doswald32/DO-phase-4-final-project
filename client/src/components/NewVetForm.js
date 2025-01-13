@@ -40,10 +40,13 @@ function NewVetForm({ onClose }) {
                 <form className="new-vet-form" onSubmit={formik.handleSubmit}>
                     <label htmlFor="firstName">First Name: </label>
                     <input id="firstName" name="firstName" placeholder="First Name" value={formik.values.firstName} onChange={formik.handleChange}/>
+                    <br/>
                     <label htmlFor="lastName">Last Name: </label>
                     <input id="lastName" name="lastName" placeholder="Last Name" value={formik.values.lastName} onChange={formik.handleChange}/>
+                    <br/>
                     <label htmlFor="hireDate">Hire Date: </label>
                     <input id="hireDate" name="hireDate" type="date" value={formik.values.hireDate} onChange={formik.handleChange}/>
+                    <br/>
                     <button type="submit">Submit</button>
                     <button type="button" onClick={onClose}>Cancel</button>
                 </form>

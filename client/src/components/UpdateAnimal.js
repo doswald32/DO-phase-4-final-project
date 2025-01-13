@@ -36,6 +36,14 @@ function UpdateAnimal() {
         ))
     }
 
+    function secondaryOwnerOptions(primaryOwnerId) {
+        return owners
+            .filter((owner) => owner.id !== parseInt(primaryOwnerId))
+            .map((owner) => (
+                <option key={owner.id} value={owner.id}>{`${owner.first_name} ${owner.last_name}`}</option>
+            ));
+    }
+
     function vetOptions() {
         return vets.map((vet) => (
             <option key={vet.id} value={vet.id}>{`${vet.first_name} ${vet.last_name}`}</option>
@@ -47,6 +55,7 @@ function UpdateAnimal() {
         species: Yup.string().required("Species is required"),
         dob: Yup.date().required("Date of birth is required"),
         primaryOwnerId: Yup.string().required("Primary owner is required"),
+        secondaryOwnerId: Yup.string(),
         vet_id: Yup.string().required("Veterinarian is required"),
         visit_date: Yup.date().required("Visit date is required"),
         visit_summary: Yup.string().required("Visit summary is required"),
@@ -59,6 +68,7 @@ function UpdateAnimal() {
             dob: initialFormValues.dob || "",
             vetId: initialFormValues.vet_id || "",
             primaryOwnerId: initialFormValues.visits[0]?.owner_id || "",
+            secondaryOwnerId: "",
             visit_date: initialFormValues.visits[0]?.date || "",
             visit_summary: initialFormValues.visits[0]?.summary || "",
         },
@@ -95,12 +105,15 @@ function UpdateAnimal() {
                 <label htmlFor="dob">DOB: </label>
                 <input id="dob" name="dob" className="animal-form-inputs" type="date" value={formik.values.dob} onChange={formik.handleChange}/>
                 <label htmlFor="primaryOwnerId">Owner: </label>
-                <div className="primary-owner-container">
                     <select id="primaryOwnerId" name="primaryOwnerId" className="animal-form-inputs" value={formik.values.primaryOwnerId} onChange={formik.handleChange}>
                         <option value="">Select an Owner</option>
                         {primaryOwnerOptions()}
                     </select>
-                </div>
+                <label htmlFor="secondaryOwnerId">Secondary Owner: </label>
+                    <select id="secondaryOwnerId" name="secondaryOwnerId" className="animal-form-inputs" value={formik.values.secondaryOwnerId} onChange={formik.handleChange}>
+                        <option value="">Select a Secondary Owner</option>
+                        {secondaryOwnerOptions(formik.values.primaryOwnerId)}
+                    </select>
                 <label htmlFor="vet_id">Attending Veterinarian: </label>
                     <select id="vet_id" name="vet_id" className="animal-form-inputs" value={formik.values.vetId} onChange={formik.handleChange}>
                         <option>Select a Veterinarian</option>

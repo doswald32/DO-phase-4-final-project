@@ -52,14 +52,7 @@
 .animal-form-inputs {
   margin-bottom: 10px;
 }
-/* 
-.primary-owner-container {
-  display: flex;
-}
 
-#primaryOwnerId {
-  width: 268px;
-} */
 
 #new-animal-submit-button {
   width: 75px;
@@ -80,6 +73,7 @@
 }
 
 .new-vet-form, .new-owner-form {
+  display: block;
   background: white;
   padding: 20px;
   border-radius: 10px;
@@ -100,5 +94,14 @@
   text-decoration: none;
   font-size: 12px;
   cursor: pointer;
+}
+
+.line {
+  float: left;
+  width: 500px;
+}
+
+.new-owner-button, .new-vet-button {
+  margin: 5px;
 }
 

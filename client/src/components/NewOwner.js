@@ -39,6 +39,7 @@ function NewOwner({ onClose }) {
                 <form className="new-owner-form" onSubmit={formik.handleSubmit}>
                     <label htmlFor="firstName">First Name: </label>
                     <input id="firstName" name="firstName" placeholder="First Name" value={formik.values.firstName} onChange={formik.handleChange}/>
+                    <br/>
                     <label htmlFor="lastName">Last Name: </label>
                     <input id="lastName" name="lastName" placeholder="Last Name" value={formik.values.lastName} onChange={formik.handleChange}/>
                     <button type="submit">Submit</button>
