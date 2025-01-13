@@ -4,9 +4,9 @@ import App from "./components/App";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./components/Home";
-import Animals from "./components/Animals";
-import NewAnimal from "./components/NewAnimal";
-import UpdateAnimal from "./components/UpdateAnimal";
+import Visits from "./components/Visits";
+import NewVisit from "./components/NewVisit";
+import UpdateVisit from "./components/UpdateVisit";
 
 const router = createBrowserRouter([
     {
@@ -18,16 +18,16 @@ const router = createBrowserRouter([
                 element: <Home />,
             },
             {
-                path:"/animals",
-                element: <Animals />,
+                path:"/visits",
+                element: <Visits />,
             },
             {
-                path:"/new-animal",
-                element: <NewAnimal />,
+                path:"/new-visit",
+                element: <NewVisit />,
             },
             {
-                path:"/update-animal/:id",
-                element: <UpdateAnimal />
+                path:"/update-visit/:id",
+                element: <UpdateVisit />
             }
         ]
     }

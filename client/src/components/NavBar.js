@@ -10,16 +10,16 @@ function NavBar() {
                 Home
             </NavLink>
             <NavLink
-            to="/animals"
+            to="/visits"
             className="nav-link"
             >
-                Animals
+                Visits
             </NavLink>
             <NavLink
-            to="/new-animal"
+            to="/new-visit"
             className="nav-link"
             >
-                New Animal
+                New Visit
             </NavLink>
         </nav>
     )

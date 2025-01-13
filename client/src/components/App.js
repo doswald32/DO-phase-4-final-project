@@ -5,23 +5,15 @@ import { useEffect, useState } from "react";
 
 function App() {
 
-  const [animalsList, setAnimalsList] = useState([])
-  const [owners, setOwners] = useState([])
+  const [pets, setPets] = useState([])
   const [vets, setVets] = useState([])
   const [visits, setVisits] = useState([])
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5555/animals')
+    fetch('http://127.0.0.1:5555/pets')
     .then((r) => r.json())
-    .then(data => setAnimalsList(data))
+    .then(data => setPets(data))
   }, [])
-
-  useEffect(() => {
-    fetch('http://127.0.0.1:5555/owners')
-    .then(r => r.json())
-    .then(data => setOwners(data))
-  }, []);
-  
   
   useEffect(() => {
     fetch('http://127.0.0.1:5555/vets')
@@ -40,7 +32,7 @@ function App() {
       <header>
         <NavBar />
       </header>
-      <Outlet context={{ animalsList, setAnimalsList, owners, setOwners, vets, setVets, visits, setVisits }}/>
+      <Outlet context={{ pets, setPets, vets, setVets, visits, setVisits }}/>
     </div>
   );
 }

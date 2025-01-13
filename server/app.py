@@ -45,8 +45,8 @@ class PetResource(Resource):
                 name=data["name"],
                 species=data["species"],
                 dob=dob,
-                vet_id=data["vet_id"]
             )
+            ipdb.set_trace()
             for owner_id in data.get("owners", []):
                 owner = Owner.query.get(owner_id)
                 if not owner:
@@ -114,35 +114,34 @@ class PetResource(Resource):
 
 
 class VetResource(Resource):
-    def get(self):
-        vets = [vet.to_dict() for vet in Vet.query.all()]
-        return vets, 200
-
-    def post(self):
-        try:
-            data = request.get_json()
-            hire_date = datetime.strptime(data["hireDate"], "%Y-%m-%d").date()
-            new_vet = Vet(
-                first_name=data["firstName"], last_name=data["lastName"], hire_date=hire_date
-            )
-            db.session.add(new_vet)
-            db.session.commit()
-            return new_vet.to_dict(), 201
-        except Exception as e:
-            db.session.rollback()
-            return handle_error(f"Error creating vet: {str(e)}")
+    def get(self, id=None):
+        if id is None:
+            vets = [vet.to_dict() for vet in Vet.query.all()]
+            return make_response(vets, 200)
+        else:
+            vet = Vet.query.filter(Vet.id == id).first()
+            if not vet:
+                handle_not_found("Pet", id)
+            return make_response(vet.to_dict(), 200)
 
 
 class VisitResource(Resource):
-    def get(self):
-        visits = [visit.to_dict() for visit in Visit.query.all()]
-        return visits, 200
+    def get(self, id=None):
+        if id is None:
+            visits = [visit.to_dict() for visit in Visit.query.all()]
+            return make_response(visits, 200)
+        else: 
+            visit = Visit.query.filter(Visit.id == id).first()
+            if not visit:
+                handle_not_found("Pet", id)
+            return make_response(visit.to_dict(), 200)
+
 
 
 api.add_resource(IndexResource, "/")
 api.add_resource(PetResource, "/pets", "/pets/<int:id>")
-api.add_resource(VetResource, "/vets")
-api.add_resource(VisitResource, "/visits")
+api.add_resource(VetResource, "/vets", "/vets/<int:id>")
+api.add_resource(VisitResource, "/visits", "/visits/<int:id>")
 
 if __name__ == "__main__":
     app.run(port=5555, debug=True)

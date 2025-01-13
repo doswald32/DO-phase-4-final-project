@@ -11,7 +11,7 @@
   color: white;
 }
 
-.animal-card {
+.visit-card {
   font-family: Arial, Helvetica, sans-serif;
   font-size: medium;
   width: 400px;
@@ -23,17 +23,17 @@
   background-color: rgb(240, 236, 236);
 }
 
-#animal-card-name {
+#visit-card-id {
   font-weight: bold;
   font-size: large;
 }
 
-.animal-card-items {
+.visit-card-items {
   margin: auto;
   padding: 5px;
 }
 
-.animals-list {
+.visits-list {
   border-style: solid;
   border-width: 1px;
   width: fit-content;
@@ -43,23 +43,23 @@
   border-radius: 5px;
 }
 
-.new-animal-form {
+.new-visit-form {
   display: grid;
   width: 400px;
   margin: 5px;
 }
 
-.animal-form-inputs {
+.visit-form-inputs {
   margin-bottom: 10px;
 }
 
 
-#new-animal-submit-button {
+#new-visit-submit-button {
   width: 75px;
   margin-top: 10px;
 }
 
-.new-vet-form-container, .new-owner-form-container {
+.new-vet-form-container, .new-pet-form-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -72,7 +72,7 @@
   z-index: 1000;
 }
 
-.new-vet-form, .new-owner-form {
+.new-vet-form, .new-pet-form {
   display: block;
   background: white;
   padding: 20px;
@@ -81,7 +81,7 @@
   text-align: center;
 }
 
-.animal-card-button {
+.visit-card-button {
   display: inline-block;
   margin-left: 5px;
   padding: 10px;
@@ -101,7 +101,7 @@
   width: 500px;
 }
 
-.new-owner-button, .new-vet-button {
+.new-pet-button, .new-vet-button {
   margin: 5px;
 }
 
