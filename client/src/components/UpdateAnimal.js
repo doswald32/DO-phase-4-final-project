@@ -6,13 +6,7 @@ import * as Yup from "yup";
 function UpdateAnimal() {
     const { id } = useParams();
     const { setAnimalsList, owners, vets } = useOutletContext();
-    const [initialFormValues, setInitialFormValues] = useState({
-        name: "",
-        species: "",
-        dob: "",
-        vet_id: "",
-        visits: [],
-    })
+    const [initialFormValues, setInitialFormValues] = useState(null)
 
     useEffect(() => {
         if (id) {
@@ -20,8 +14,14 @@ function UpdateAnimal() {
                 .then((response) => response.json())
                 .then((data) => {
                     const formattedData = {
-                        ...data,
-                        dob: data.DOB ? new Date(data.DOB).toISOString().split('T')[0] : "",
+                        name: data.name || "",
+                        species: data.species || "",
+                        dob: data.DOB ? new Date(data.DOB).toISOString().split("T")[0] : "",
+                        vetId: data.vet?.id || "",
+                        primaryOwnerId: data.visits[0]?.owner?.id || "", // Prepopulate with first owner's ID
+                        secondaryOwnerId: "", // Remains empty as it's optional
+                        visit_date: data.visits[0]?.date || "",
+                        visit_summary: data.visits[0]?.summary || "",
                     };
                     setInitialFormValues(formattedData);
                 })
@@ -40,7 +40,9 @@ function UpdateAnimal() {
         return owners
             .filter((owner) => owner.id !== parseInt(primaryOwnerId))
             .map((owner) => (
-                <option key={owner.id} value={owner.id}>{`${owner.first_name} ${owner.last_name}`}</option>
+                <option key={owner.id} value={owner.id}>
+                    {`${owner.first_name} ${owner.last_name}`}
+                </option>
             ));
     }
 
@@ -62,37 +64,61 @@ function UpdateAnimal() {
     })
 
     const formik = useFormik({
-        initialValues: {
-            name: initialFormValues.name || "",
-            species: initialFormValues.species || "",
-            dob: initialFormValues.dob || "",
-            vetId: initialFormValues.vet_id || "",
-            primaryOwnerId: initialFormValues.visits[0]?.owner_id || "",
+        initialValues: initialFormValues || {
+            name: "",
+            species: "",
+            dob: "",
+            vetId: "",
+            primaryOwnerId: "",
             secondaryOwnerId: "",
-            visit_date: initialFormValues.visits[0]?.date || "",
-            visit_summary: initialFormValues.visits[0]?.summary || "",
+            visit_date: "",
+            visit_summary: "",
         },
-        validationSchema: formSchema,
         enableReinitialize: true,
+        validationSchema: formSchema,
         onSubmit: (values, { resetForm }) => {
+            const payload = {
+                name: values.name,
+                species: values.species,
+                DOB: values.dob,
+                vet_id: values.vetId,
+                visits: [
+                    {
+                        owner_id: values.primaryOwnerId,
+                        date: values.visit_date,
+                        summary: values.visit_summary,
+                    },
+                ],
+            };
+
+            // If secondary owner is added, add a second visit for them
+            if (values.secondaryOwnerId) {
+                payload.visits.push({
+                    owner_id: values.secondaryOwnerId,
+                    date: values.visit_date, // Same date as the primary visit
+                    summary: `Co-owner added: ${values.visit_summary}`, // Optional note for co-ownership
+                });
+            }
+
             fetch(`http://127.0.0.1:5555/animals/${id}`, {
-                method: 'PATCH',
+                method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(values, null, 2)
+                body: JSON.stringify(payload),
             })
-            .then((r) => r.json())
-            .then((updatedAnimal) => {
-                setAnimalsList((prevList) =>
-                    prevList.map((animal) =>
-                        animal.id === updatedAnimal.id ? updatedAnimal : animal
-                    )
-                )
-            })
-            resetForm()
-        }
-    }) 
+                .then((response) => response.json())
+                .then((updatedAnimal) => {
+                    setAnimalsList((prevList) =>
+                        prevList.map((animal) =>
+                            animal.id === updatedAnimal.id ? updatedAnimal : animal
+                        )
+                    );
+                    resetForm();
+                })
+                .catch((error) => console.error("Error updating animal:", error));
+        },
+    });
 
 
     return (

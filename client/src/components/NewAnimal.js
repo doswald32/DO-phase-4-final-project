@@ -85,7 +85,7 @@ function NewAnimal() {
                     <label htmlFor="dob">DOB: </label>
                     <input id="dob" name="dob" className="animal-form-inputs" type="date" value={formik.values.dob} onChange={formik.handleChange}/>
                     <label htmlFor="ownerId">Owner: </label>
-                        <select id="ownerId" name="ownerId" className="animal-form-inputs" value={formik.values.ownerIdwnerId} onChange={formik.handleChange}>
+                        <select id="ownerId" name="ownerId" className="animal-form-inputs" value={formik.values.ownerId} onChange={formik.handleChange}>
                             <option value="">Select an Owner</option>
                             {ownerOptions()}
                         </select>

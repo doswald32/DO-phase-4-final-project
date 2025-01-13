@@ -46,21 +46,20 @@ def create_animal():
         new_animal = Animal(
             name=data['name'],
             species=data['species'],
-            DOB=dob,
+            dob=dob,
             vet_id=data['vet_id'],
         )
 
-        if 'owners' in data and 'visits' in data:
-            for visit in data['visits']:
-                owner_id = int(data['owners'][0])
-                visit_date = datetime.strptime(visit['date'], '%Y-%m-%d').date()
-                new_visit = Visit(
-                    date=visit_date,
-                    summary=visit['summary'],
-                    animal=new_animal,
-                    owner_id=owner_id
-                )
-                db.session.add(new_visit)
+        for owner_id in data['owners']:
+            owner = Owner.query.filter(Owner.id == owner_id).first()
+            new_animal.owners.append(owner)
+
+        new_visit = Visit(
+            date=datetime.strptime(data['visits'][0]['date'], '%Y-%m-%d').date(),
+            summary=data['visits'][0]['summary'],
+            animal=new_animal
+        )
+        db.session.add(new_visit)
 
         db.session.add(new_animal)
         db.session.commit()
@@ -172,6 +171,15 @@ def add_vet():
     db.session.commit()
 
     return make_response(jsonify(new_vet.to_dict()), 201)
+
+
+@app.route('/visits')
+def visits():
+    visits = [visit.to_dict() for visit in Visit.query.all()]
+
+    response = make_response(jsonify(visits), 200)
+
+    return response
 
 
 if __name__ == '__main__':

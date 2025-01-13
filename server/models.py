@@ -5,6 +5,11 @@ from sqlalchemy_serializer import SerializerMixin
 
 from config import db
 
+animal_owners = db.Table(
+    'animal_owners',
+    db.Column('animal_id', db.Integer, db.ForeignKey('animals.id'), primary_key=True),
+    db.Column('owner_id', db.Integer, db.ForeignKey('owners.id'), primary_key=True)
+)
 
 class Animal(db.Model, SerializerMixin):
     __tablename__ = 'animals'
@@ -13,19 +18,19 @@ class Animal(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    DOB = db.Column(db.Date)
+    dob = db.Column(db.Date)
     species = db.Column(db.String)
     vet_id = db.Column(db.Integer, db.ForeignKey('vets.id'))
 
-    visits = db.relationship('Visit', back_populates='animal')
-
     vet = db.relationship('Vet', back_populates='animals')
 
-    owners = association_proxy('visits', 'owner', creator=lambda owner_obj: Visit(owner=owner_obj))
+    visits = db.relationship('Visit', back_populates='animal', cascade='all, delete-orphan')
+
+    owners = db.relationship('Owner', secondary=animal_owners, back_populates='animals')
 
 
     def __repr__(self):
-        return f'<Animal {self.id}, {self.name}, {self.DOB}, {self.species}>'
+        return f'<Animal {self.id}, {self.name}, {self.dob}, {self.species}>'
 
 
 class Owner(db.Model, SerializerMixin):
@@ -37,9 +42,9 @@ class Owner(db.Model, SerializerMixin):
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
 
-    visits = db.relationship('Visit', back_populates='owner', cascade='all, delete-orphan')
+    visits = association_proxy('animals', 'visits')
 
-    animals = association_proxy('visits', 'animal', creator=lambda animal_obj: Visit(animal=animal_obj))
+    animals = db.relationship('Animal', secondary=animal_owners, back_populates='owners')
 
     def __repr__(self):
         return f'<Owner {self.first_name} {self.last_name}>'
@@ -48,7 +53,7 @@ class Owner(db.Model, SerializerMixin):
 class Vet(db.Model, SerializerMixin):
     __tablename__ = 'vets'
 
-    serialize_rules = ('-animals.vet', '-animals.visits')
+    serialize_rules = ('-animals.vet', '-visits.vet')
 
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
@@ -57,7 +62,7 @@ class Vet(db.Model, SerializerMixin):
 
     animals = db.relationship('Animal', back_populates='vet')
 
-    visits = association_proxy('animals', 'visits', creator=lambda visit_obj: Animal(visit=visit_obj))
+    visits = association_proxy('animals', 'visits')
 
     def __repr__(self):
         return f'<Vet {self.id}, {self.first_name} {self.last_name}>'
@@ -73,13 +78,10 @@ class Visit(db.Model, SerializerMixin):
     summary = db.Column(db.String)
 
     animal_id = db.Column(db.Integer, db.ForeignKey('animals.id'))
-    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
 
     animal = db.relationship('Animal', back_populates='visits')
 
-    owner = db.relationship('Owner', back_populates='visits')
-
-    vet = association_proxy('animal', 'vet', creator=lambda vet_obj: Animal(vet=vet_obj))
+    vet = association_proxy('animal', 'vet')
 
     def __repr__(self):
         return f'{self.date}'

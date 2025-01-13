@@ -8,6 +8,7 @@ function App() {
   const [animalsList, setAnimalsList] = useState([])
   const [owners, setOwners] = useState([])
   const [vets, setVets] = useState([])
+  const [visits, setVisits] = useState([])
 
   useEffect(() => {
     fetch('http://127.0.0.1:5555/animals')
@@ -28,12 +29,18 @@ function App() {
     .then(data => setVets(data))
   }, []);
 
+  useEffect(() => {
+    fetch('http://127.0.0.1:5555/visits')
+    .then((r) => r.json())
+    .then(data => setVisits(data))
+  }, [])
+
   return (
     <div>
       <header>
         <NavBar />
       </header>
-      <Outlet context={{ animalsList, setAnimalsList, owners, setOwners, vets, setVets }}/>
+      <Outlet context={{ animalsList, setAnimalsList, owners, setOwners, vets, setVets, visits, setVisits }}/>
     </div>
   );
 }
