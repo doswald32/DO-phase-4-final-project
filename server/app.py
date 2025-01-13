@@ -30,9 +30,9 @@ class AnimalResource(Resource):
     def get(self, id=None):
         if id is None:
             animals = [animal.to_dict() for animal in Animal.query.all()]
-            return make_response({"animals": animals}, 200)
+            return make_response(animals, 200)
         else:
-            animal = Animal.query.get(id)
+            animal = Animal.query.filter(Animal.id == id).first()
             if not animal:
                 handle_not_found("Animal", id)
             return make_response(animal.to_dict(), 200)
@@ -70,7 +70,7 @@ class AnimalResource(Resource):
             return handle_error(f"Error creating animal: {str(e)}")
 
     def patch(self, id):
-        animal = Animal.query.get(id)
+        animal = Animal.query.filter(Animal.id == id).first()
         if not animal:
             handle_not_found("Animal", id)
 
@@ -85,7 +85,7 @@ class AnimalResource(Resource):
             if "owners" in data:
                 animal.owners.clear()
                 for owner_id in data["owners"]:
-                    owner = Owner.query.get(owner_id)
+                    owner = Owner.query.filter(Owner.id == owner_id).first()
                     if not owner:
                         handle_not_found("Owner", owner_id)
                     animal.owners.append(owner)
@@ -104,7 +104,7 @@ class AnimalResource(Resource):
             return handle_error(f"Error updating animal: {str(e)}")
 
     def delete(self, id):
-        animal = Animal.query.get(id)
+        animal = Animal.query.filter(Animal.id == id).first()
         if not animal:
             handle_not_found("Animal", id)
 
