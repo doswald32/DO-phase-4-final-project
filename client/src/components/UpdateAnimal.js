@@ -13,13 +13,15 @@ function UpdateAnimal() {
             fetch(`http://127.0.0.1:5555/animals/${id}`)
                 .then((response) => response.json())
                 .then((data) => {
+                    const primaryOwner = data.owners[0];
+                    const secondaryOwner = data.owners[1] || null;
                     const formattedData = {
                         name: data.name || "",
                         species: data.species || "",
-                        dob: data.DOB ? new Date(data.DOB).toISOString().split("T")[0] : "",
-                        vetId: data.vet?.id || "",
-                        primaryOwnerId: data.visits[0]?.owner?.id || "", // Prepopulate with first owner's ID
-                        secondaryOwnerId: "", // Remains empty as it's optional
+                        dob: data.dob ? new Date(data.dob).toISOString().split("T")[0] : "",
+                        vet_id: data.vet?.id || "",
+                        primaryOwnerId: primaryOwner?.id || "", // Prepopulate with first owner's ID
+                        secondaryOwnerId: secondaryOwner?.id || "",
                         visit_date: data.visits[0]?.date || "",
                         visit_summary: data.visits[0]?.summary || "",
                     };
@@ -68,7 +70,7 @@ function UpdateAnimal() {
             name: "",
             species: "",
             dob: "",
-            vetId: "",
+            vet_id: "",
             primaryOwnerId: "",
             secondaryOwnerId: "",
             visit_date: "",
@@ -77,27 +79,25 @@ function UpdateAnimal() {
         enableReinitialize: true,
         validationSchema: formSchema,
         onSubmit: (values, { resetForm }) => {
+            console.log("Submitting form...")
+            console.log("Form values: ", values)
             const payload = {
                 name: values.name,
                 species: values.species,
-                DOB: values.dob,
-                vet_id: values.vetId,
+                dob: values.dob,
+                vet_id: values.vet_id,
+                owners: [values.primaryOwnerId],
                 visits: [
                     {
-                        owner_id: values.primaryOwnerId,
                         date: values.visit_date,
                         summary: values.visit_summary,
                     },
                 ],
             };
 
-            // If secondary owner is added, add a second visit for them
+            // Add secondary owner if selected
             if (values.secondaryOwnerId) {
-                payload.visits.push({
-                    owner_id: values.secondaryOwnerId,
-                    date: values.visit_date, // Same date as the primary visit
-                    summary: `Co-owner added: ${values.visit_summary}`, // Optional note for co-ownership
-                });
+                payload.owners.push(values.secondaryOwnerId);
             }
 
             fetch(`http://127.0.0.1:5555/animals/${id}`, {
@@ -141,7 +141,7 @@ function UpdateAnimal() {
                         {secondaryOwnerOptions(formik.values.primaryOwnerId)}
                     </select>
                 <label htmlFor="vet_id">Attending Veterinarian: </label>
-                    <select id="vet_id" name="vet_id" className="animal-form-inputs" value={formik.values.vetId} onChange={formik.handleChange}>
+                    <select id="vet_id" name="vet_id" className="animal-form-inputs" value={formik.values.vet_id} onChange={formik.handleChange}>
                         <option>Select a Veterinarian</option>
                         {vetOptions()}
                     </select>

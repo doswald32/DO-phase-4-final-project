@@ -36,6 +36,16 @@ def animals():
     return response
 
 
+@app.route('/animals/<int:id>')
+def get_animal_by_id(id):
+    animal = Animal.query.filter(Animal.id == id).first()
+    animal_dict = animal.to_dict()
+
+    response = make_response(jsonify(animal_dict), 200)
+
+    return response
+
+
 @app.route('/animals', methods=['POST'])
 def create_animal():
     try: 
@@ -70,31 +80,47 @@ def create_animal():
         db.session.rollback()
         print(f"Error creating animal: {e}")  # Log the error
         return make_response({"error": str(e)}, 400)
-    
-
-@app.route('/animals/<int:id>')
-def get_animal_by_id(id):
-    animal = Animal.query.filter(Animal.id == id).first()
-    animal_dict = animal.to_dict()
-
-    response = make_response(jsonify(animal_dict), 200)
-
-    return response
 
 
 @app.route('/animals/<int:id>', methods=['PATCH'])
 def update_animal(id):
     data = request.json
-    animal = Animal.query.filter_by(id = id).first()
-    for key, value in data.items():
-        if key == "DOB":
-            setattr(animal, "DOB", datetime.strptime(value, '%Y-%m-%d').date())
-        else: 
-            setattr(animal, key, value)
-    
-    db.session.commit()
+    animal = Animal.query.filter_by(id=id).first()
 
-    return make_response(jsonify(animal.to_dict()), 200)
+    if not animal:
+        return make_response({"error": "Animal not found"}, 404)
+
+    try:
+        # Update basic fields
+        for key, value in data.items():
+            if key == "dob":
+                setattr(animal, "dob", datetime.strptime(value, '%Y-%m-%d').date())
+            elif key not in ["owners", "visits"]:
+                setattr(animal, key, value)
+
+        # Update owners
+        if "owners" in data:
+            animal.owners.clear()
+            for owner_id in data["owners"]:
+                owner = Owner.query.get(owner_id)
+                if owner:
+                    animal.owners.append(owner)
+
+        # Update visits
+        if "visits" in data:
+            for visit_data in data["visits"]:
+                visit = Visit.query.filter_by(animal_id=animal.id).first()
+                if visit:
+                    visit.date = datetime.strptime(visit_data["date"], '%Y-%m-%d').date()
+                    visit.summary = visit_data["summary"]
+
+        db.session.commit()
+        return make_response(jsonify(animal.to_dict()), 200)
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating animal: {e}")
+        return make_response({"error": str(e)}, 400)
 
 
 @app.route('/animals/<int:id>', methods=['DELETE'])
