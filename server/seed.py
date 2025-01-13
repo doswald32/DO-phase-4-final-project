@@ -3,21 +3,17 @@
 # Standard library imports
 from datetime import date
 
-from sqlalchemy import text
-
 # Local imports
 from app import app
-from models import db, Animal, Owner, Visit, Vet
+from models import db, Pet, Visit, Vet
 
 
 if __name__ == '__main__':
     
     with app.app_context():
         print("Clearing database...")
-        db.session.execute(text('DELETE FROM animal_owners'))
-        Animal.query.delete()
+        Pet.query.delete()
         Vet.query.delete()
-        Owner.query.delete()
         Visit.query.delete()
         db.session.commit()
 
@@ -29,46 +25,26 @@ if __name__ == '__main__':
         db.session.add_all(vets)
         db.session.commit()
 
-        # Seed Animals
-        print("Seeding animals...")
-        a1 = Animal(name="Duncan", dob=date(2000, 11, 11), species="Dog", vet=vet1)
-        a2 = Animal(name="Larry", dob=date(2000, 11, 11), species="Dog", vet=vet1)
-        a3 = Animal(name="Lucy", dob=date(2000, 11, 11), species="Cat", vet=vet2)
-        a4 = Animal(name="Trudy", dob=date(2000, 11, 11), species="Turtle", vet=vet2)
-        a5 = Animal(name="Ethel", dob=date(2000, 11, 11), species="Cat", vet=vet2)
-        animals = [a1, a2, a3, a4, a5]
-        db.session.add_all(animals)
-        db.session.commit()
-
-        # Seed Owners
-        print("Seeding owners...")
-        o1 = Owner(first_name="David", last_name="Oswald")
-        o2 = Owner(first_name="John", last_name="Smith")
-        o3 = Owner(first_name="Carol", last_name="Stevens")
-        o4 = Owner(first_name="Julie", last_name="Johnson")
-        o5 = Owner(first_name="Adam", last_name="Farley")
-        owners = [o1, o2, o3, o4, o5]
-        db.session.add_all(owners)
-        db.session.commit()
-
-        # Associate Owners with Animals
-        print("Associating owners with animals...")
-        a1.owners.extend([o1, o2])  # Animal with two owners
-        a2.owners.append(o3)        # Animal with one owner
-        a3.owners.extend([o4, o5])  # Animal with two owners
-        a4.owners.append(o1)        # Animal with one owner
-        a5.owners.append(o2)        # Animal with one owner
+        # Seed Pets
+        print("Seeding pets...")
+        p1 = Pet(name="Duncan", dob=date(2000, 11, 11), species="Dog")
+        p2 = Pet(name="Larry", dob=date(2000, 11, 11), species="Dog")
+        p3 = Pet(name="Lucy", dob=date(2000, 11, 11), species="Cat")
+        p4 = Pet(name="Trudy", dob=date(2000, 11, 11), species="Turtle")
+        p5 = Pet(name="Ethel", dob=date(2000, 11, 11), species="Cat")
+        pets = [p1, p2, p3, p4, p5]
+        db.session.add_all(pets)
         db.session.commit()
 
         # Seed Visits
         print("Seeding visits...")
-        v1 = Visit(date=date(2024, 1, 1), summary="Annual check-up", animal=a1)
-        v2 = Visit(date=date(2024, 6, 15), summary="Follow-up vaccination", animal=a1)
-        v3 = Visit(date=date(2024, 1, 1), summary="Annual check-up", animal=a2)
-        v4 = Visit(date=date(2024, 1, 1), summary="Annual check-up", animal=a3)
-        v5 = Visit(date=date(2024, 1, 1), summary="Annual check-up", animal=a4)
-        v6 = Visit(date=date(2024, 1, 1), summary="Annual check-up", animal=a5)
-        visits = [v1, v2, v3, v4, v5, v6]
+        vis1 = Visit(date=date(2024, 1, 1), summary="Annual check-up", pet=p1, vet=vet1)
+        vis2 = Visit(date=date(2024, 6, 15), summary="Follow-up vaccination", pet=p1, vet=vet2)
+        vis3 = Visit(date=date(2024, 1, 1), summary="Annual check-up", pet=p2, vet=vet2)
+        vis4 = Visit(date=date(2024, 1, 1), summary="Annual check-up", pet=p3, vet=vet2)
+        vis5 = Visit(date=date(2024, 1, 1), summary="Annual check-up", pet=p4, vet=vet2)
+        vis6 = Visit(date=date(2024, 1, 1), summary="Annual check-up", pet=p5, vet=vet2)
+        visits = [vis1, vis2, vis3, vis4, vis5, vis6]
         db.session.add_all(visits)
         db.session.commit()
 
