@@ -46,25 +46,11 @@ class PetResource(Resource):
                 species=data["species"],
                 dob=dob,
             )
-            ipdb.set_trace()
-            for owner_id in data.get("owners", []):
-                owner = Owner.query.get(owner_id)
-                if not owner:
-                    handle_not_found("Owner", owner_id)
-                new_pet.owners.append(owner)
-
-            for visit in data.get("visits", []):
-                new_visit = Visit(
-                    date=datetime.strptime(visit["date"], "%Y-%m-%d").date(),
-                    summary=visit["summary"],
-                    pet=new_pet
-                )
-                db.session.add(new_visit)
 
             db.session.add(new_pet)
             db.session.commit()
 
-            return new_pet.to_dict(), 201
+            return make_response(new_pet.to_dict(), 201)
         except Exception as e:
             db.session.rollback()
             return handle_error(f"Error creating pet: {str(e)}")
@@ -124,6 +110,23 @@ class VetResource(Resource):
                 handle_not_found("Pet", id)
             return make_response(vet.to_dict(), 200)
 
+    def post(self):
+        try:
+            data = request.get_json()
+            hire_date = datetime.strptime(data["hire_date"], "%Y-%m-%d").date()
+            new_vet = Vet(
+                first_name=data["first_name"],
+                last_name=data["last_name"],
+                hire_date=hire_date
+            )
+
+            db.session.add(new_vet)
+            db.session.commit()
+
+            return make_response(new_vet.to_dict(), 201)
+        except Exception as e:
+            db.session.rollback()
+            return handle_error(f"Error creating vet: {str(e)}")
 
 class VisitResource(Resource):
     def get(self, id=None):
@@ -136,7 +139,14 @@ class VisitResource(Resource):
                 handle_not_found("Pet", id)
             return make_response(visit.to_dict(), 200)
 
+    def delete(self, id):
+        visit = Visit.query.filter(Visit.id == id).first()
+        if not visit:
+            handle_not_found("Pet", id)
 
+        db.session.delete(visit)
+        db.session.commit()
+        return {"message": f"Visit {id} successfully deleted"}, 200
 
 api.add_resource(IndexResource, "/")
 api.add_resource(PetResource, "/pets", "/pets/<int:id>")
