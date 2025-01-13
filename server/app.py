@@ -23,7 +23,7 @@ def handle_error(message):
 
 class IndexResource(Resource):
     def get(self):
-        return {"message": "Welcome to the Project Server"}, 200
+        return {"message": "Project Server"}, 200
 
 
 class AnimalResource(Resource):
