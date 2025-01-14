@@ -122,17 +122,12 @@ class VisitResource(Resource):
         
         try:
             data = request.get_json()
-            print("Data received for update: ", data)
-            print("Before update:", visit.to_dict())
-            for attr in data:
-                if attr == "date":
-                    setattr(visit, attr, datetime.strptime(data[attr], "%Y-%m-%d").date())
-                else:
-                    setattr(visit, attr, data[attr])
+            visit.date = datetime.strptime(data['visit_date'], "%Y-%m-%d").date()
+            visit.summary = data['visit_summary']
+            visit.pet_id = data['pet_id']
+            visit.vet_id = data['vet_id']
 
-            print("After update:", visit.to_dict())
             db.session.commit()
-            print("visit updated:" , visit.to_dict())
 
             return jsonify(visit.to_dict(), 200)
 

@@ -1,26 +1,10 @@
 import { useFormik } from "formik";
-// import { useEffect, useState } from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import * as Yup from "yup";
 
 function UpdateVisit() {
     const { id } = useParams();
     const { setVisits, pets, vets } = useOutletContext();
-    // const [initialFormValues, setInitialFormValues] = useState(null)
-
-    // useEffect(() => {
-    //     if (id) {
-    //         fetch(`http://127.0.0.1:5555/visits/${id}`)
-    //             .then((response) => response.json())
-    //             .then((data) => {setInitialFormValues(data);
-    //                 setLoading(false);
-    //                 console.log(data)
-    //                 console.log(initialFormValues)
-    //             })
-    //             .catch((error) => console.error("Error fetching visit:", error));
-    //             setLoading(false)
-    //     }
-    // }, [id]);
                   
 
     function petOptions() {
@@ -51,7 +35,6 @@ function UpdateVisit() {
         },
         validationSchema: formSchema,
         onSubmit: (values, { resetForm }) => {
-            console.log("Submitting values: ", values);
             fetch(`http://127.0.0.1:5555/visits/${id}`, {
                 method: "PATCH",
                 headers: {
@@ -61,13 +44,11 @@ function UpdateVisit() {
             })
             .then((response) => response.json())
             .then((data) => {
-                console.log("data after patch:", data)
                 setVisits((prevVisits) => {
-                    const updatedVisits = prevVisits.map((visit) =>
-                        visit.id === data.id ? data : visit
-                    );
-                    console.log("Updated visits state:", updatedVisits);
-                    return updatedVisits;
+                    const updatedVisits = prevVisits.map((visit) => 
+                    visit.id === data.id ? data : visit
+                );
+                return updatedVisits
                 });
                 resetForm();
             })
