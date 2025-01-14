@@ -64,7 +64,7 @@ class VetResource(Resource):
         else:
             vet = Vet.query.filter(Vet.id == id).first()
             if not vet:
-                handle_not_found("Pet", id)
+                handle_not_found("Vet", id)
             return make_response(vet.to_dict(), 200)
 
     def post(self):
@@ -93,7 +93,7 @@ class VisitResource(Resource):
         else: 
             visit = Visit.query.filter(Visit.id == id).first()
             if not visit:
-                handle_not_found("Pet", id)
+                handle_not_found("Visit", id)
             return make_response(visit.to_dict(), 200)
         
     def post(self):
@@ -138,7 +138,7 @@ class VisitResource(Resource):
     def delete(self, id):
         visit = Visit.query.filter(Visit.id == id).first()
         if not visit:
-            handle_not_found("Pet", id)
+            handle_not_found("Visit", id)
 
         db.session.delete(visit)
         db.session.commit()
