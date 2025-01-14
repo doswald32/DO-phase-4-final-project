@@ -7,7 +7,7 @@ import json
 import ipdb
 from flask import request, jsonify, make_response
 from flask_restful import Resource, Api, abort
-from datetime import datetime
+from datetime import date, datetime
 from config import app, db, api
 from models import Pet, Vet, Visit
 
@@ -55,49 +55,6 @@ class PetResource(Resource):
             db.session.rollback()
             return handle_error(f"Error creating pet: {str(e)}")
 
-    def patch(self, id):
-        pet = Pet.query.filter(Pet.id == id).first()
-        if not pet:
-            handle_not_found("Pet", id)
-
-        try:
-            data = request.get_json()
-            for key, value in data.items():
-                if key == "dob":
-                    setattr(pet, "dob", datetime.strptime(value, "%Y-%m-%d").date())
-                elif key not in ["owners", "visits"]:
-                    setattr(pet, key, value)
-
-            if "owners" in data:
-                pet.owners.clear()
-                for owner_id in data["owners"]:
-                    owner = Owner.query.filter(Owner.id == owner_id).first()
-                    if not owner:
-                        handle_not_found("Owner", owner_id)
-                    pet.owners.append(owner)
-
-            if "visits" in data:
-                for visit_data in data["visits"]:
-                    visit = Visit.query.filter_by(pet_id=pet.id).first()
-                    if visit:
-                        visit.date = datetime.strptime(visit_data["date"], "%Y-%m-%d").date()
-                        visit.summary = visit_data["summary"]
-
-            db.session.commit()
-            return pet.to_dict(), 200
-        except Exception as e:
-            db.session.rollback()
-            return handle_error(f"Error updating pet: {str(e)}")
-
-    def delete(self, id):
-        pet = Pet.query.filter(Pet.id == id).first()
-        if not pet:
-            handle_not_found("Pet", id)
-
-        db.session.delete(pet)
-        db.session.commit()
-        return {"message": f"Pet {id} successfully deleted"}, 200
-
 
 class VetResource(Resource):
     def get(self, id=None):
@@ -138,6 +95,50 @@ class VisitResource(Resource):
             if not visit:
                 handle_not_found("Pet", id)
             return make_response(visit.to_dict(), 200)
+        
+    def post(self):
+        try:
+            data = request.get_json()
+            visit_date = datetime.strptime(data["visit_date"], "%Y-%m-%d").date()
+            new_visit = Visit(
+                date=visit_date,
+                summary=data["visit_summary"],
+                pet_id=int(data['pet']),
+                vet_id=int(data['vet'])
+            )
+
+            db.session.add(new_visit)
+            db.session.commit()
+
+            return make_response(new_visit.to_dict(), 201)
+        except Exception as e:
+            db.session.rollback()
+            return handle_error(f"Error creating visit: {str(e)}")
+
+    def patch(self, id):
+        visit = Visit.query.filter(Visit.id == id).first()
+        if not visit:
+            return handle_not_found("Visit", id)
+        
+        try:
+            data = request.get_json()
+            print("Data received for update: ", data)
+            print("Before update:", visit.to_dict())
+            for attr in data:
+                if attr == "date":
+                    setattr(visit, attr, datetime.strptime(data[attr], "%Y-%m-%d").date())
+                else:
+                    setattr(visit, attr, data[attr])
+
+            print("After update:", visit.to_dict())
+            db.session.commit()
+            print("visit updated:" , visit.to_dict())
+
+            return jsonify(visit.to_dict(), 200)
+
+        except Exception as e:
+            db.session.rollback()
+            return handle_error(f"Error updating visit: {str(e)}")
 
     def delete(self, id):
         visit = Visit.query.filter(Visit.id == id).first()
@@ -147,6 +148,7 @@ class VisitResource(Resource):
         db.session.delete(visit)
         db.session.commit()
         return {"message": f"Visit {id} successfully deleted"}, 200
+
 
 api.add_resource(IndexResource, "/")
 api.add_resource(PetResource, "/pets", "/pets/<int:id>")
