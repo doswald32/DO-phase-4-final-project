@@ -28,12 +28,17 @@ function NewVisit() {
         },
         validationSchema: formSchema,
         onSubmit: (values, { resetForm }) => {
-            fetch("http://127.0.0.1:5555/pets", {
+            fetch("http://127.0.0.1:5555/visits", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(values, null, 2),
+                body: JSON.stringify({
+                    pet: values.pet,
+                    vet: values.vet,
+                    visit_date: values.visit_date,
+                    visit_summary: values.visit_summary,
+                }),
             })
             .then((r) => r.json())
             .then((data) => {setVisits((prevVisits) => [...prevVisits, data]);
