@@ -10,9 +10,9 @@ class Pet(db.Model, SerializerMixin):
   serialize_rules = ('-visits.pet', '-vets.pets') 
 
   id = db.Column(db.Integer, primary_key=True)
-  name = db.Column(db.String)
-  dob = db.Column(db.Date)
-  species = db.Column(db.String)
+  name = db.Column(db.String, nullable=False)
+  dob = db.Column(db.Date, nullable=False)
+  species = db.Column(db.String, nullable=False)
 
   visits = db.relationship('Visit', back_populates='pet', cascade='all, delete-orphan')
 
@@ -28,9 +28,9 @@ class Vet(db.Model, SerializerMixin):
   serialize_rules = ('-pets.vet', '-visits.vet')
 
   id = db.Column(db.Integer, primary_key=True)
-  first_name = db.Column(db.String)
-  last_name = db.Column(db.String)
-  hire_date = db.Column(db.Date)
+  first_name = db.Column(db.String, nullable=False)
+  last_name = db.Column(db.String, nullable=False)
+  hire_date = db.Column(db.Date, nullable=False)
 
   visits = db.relationship('Visit', back_populates='vet', cascade='all, delete-orphan')
 
@@ -46,11 +46,11 @@ class Visit(db.Model, SerializerMixin):
   serialize_rules = ('-pet.visits', '-vet.visits',)
 
   id = db.Column(db.Integer, primary_key=True)
-  date = db.Column(db.Date)
-  summary = db.Column(db.String)
+  date = db.Column(db.Date, nullable=False)
+  summary = db.Column(db.String, nullable=False)
 
-  pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'))
-  vet_id = db.Column(db.Integer, db.ForeignKey('vets.id'))
+  pet_id = db.Column(db.Integer, db.ForeignKey('pets.id'), nullable=False)
+  vet_id = db.Column(db.Integer, db.ForeignKey('vets.id'), nullable=False)
 
   pet = db.relationship('Pet', back_populates='visits')
   vet = db.relationship('Vet', back_populates='visits')
